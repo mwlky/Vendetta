@@ -7,9 +7,7 @@
 #include "Sicilian/SicilianGameModeBase.h"
 #include "RequestInteraction.generated.h"
 
-/**
- * 
- */
+
 UCLASS()
 class SICILIAN_API ARequestInteraction : public AInteractable
 {
@@ -18,13 +16,11 @@ class SICILIAN_API ARequestInteraction : public AInteractable
 	ARequestInteraction();
 
 public:
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	class ACameraActor* RequestCamera = nullptr;
+	UPROPERTY(EditAnywhere)
+	class ARequestManager* RequestsManager = nullptr; 
 	
 private:
-	void Interact() override;
-	void CancelInteraction() override;
-	void BeginPlay() override;
-	
-	ASicilianGameModeBase* m_GameMode = nullptr;
+	virtual void Interact() override;
+	virtual void CancelInteraction() override;
+	virtual void BeginPlay() override;
 };

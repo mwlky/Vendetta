@@ -3,6 +3,8 @@
 
 #include "RequestInteraction.h"
 
+#include "Requests/RequestsManager.h"
+
 ARequestInteraction::ARequestInteraction()
 {
 	
@@ -10,16 +12,16 @@ ARequestInteraction::ARequestInteraction()
 
 void ARequestInteraction::BeginPlay()
 {
-	m_GameMode = Cast<ASicilianGameModeBase>(GetWorld()->GetAuthGameMode());
 }
 
 void ARequestInteraction::Interact()
 {
-	m_GameMode->StartInteraction(RequestCamera);
-	UE_LOG(LogTemp, Warning, TEXT("Int"));
+	RequestsManager->StartInteraction();
+	// m_GameMode->StartInteraction(RequestCamera);
+	UE_LOG(LogTemp, Warning, TEXT("Interaction"));
 }
 
 void ARequestInteraction::CancelInteraction()
 {
-	m_GameMode->CancelInteraction();
+	RequestsManager->CancelInteraction();
 }

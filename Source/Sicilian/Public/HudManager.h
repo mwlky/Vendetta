@@ -13,5 +13,9 @@ UCLASS()
 class SICILIAN_API AHudManager : public AHUD
 {
 	GENERATED_BODY()
+
+public:
+	UPROPERTY(BlueprintReadOnly)
+	class ARequestManager* RequestManager; 
 	
 };
