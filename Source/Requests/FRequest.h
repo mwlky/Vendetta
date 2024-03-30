@@ -1,5 +1,7 @@
 ﻿#pragma once
+
 #include "RequestsData.h"
+#include "FReport.h"
 #include "FRequest.generated.h"
 
 USTRUCT(BlueprintType)
@@ -8,9 +10,9 @@ struct FRequest
 	GENERATED_BODY()
 
 	FRequest() = default;
-	FRequest(FString name, FString surname, FString birth, ApproveType approveType, FHandwrittenLetter letter);
+	FRequest(FString name, FString surname, FString birth, ApproveType approveType, FHandwrittenLetter letter,
+	         FReport report);
 
-public:
 	UPROPERTY(BlueprintReadOnly)
 	FString RequesterName;
 
@@ -25,4 +27,7 @@ public:
 
 	UPROPERTY(BlueprintReadOnly)
 	ApproveType Type;
+
+	UPROPERTY(BlueprintReadOnly)
+	FReport ReportData;
 };

@@ -54,4 +54,10 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (MultiLine = true))
 	TArray<FHandwrittenLetter> UnacceptableLetters;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (MultiLine = true))
+	TArray<FString> GoodReports;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (MultiLine = true))
+	TArray<FString> Signs;
 };

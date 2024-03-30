@@ -6,10 +6,11 @@
 #include "Blueprint/UserWidget.h"
 #include "RequestWidget.generated.h"
 
+UDELEGATE(BlueprintAuthorityOnly)
+DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnInjected);
+
 class ARequestManager;
-/**
- * 
- */
+
 UCLASS()
 class REQUESTSYSTEM_API URequestWidget : public UUserWidget
 {
@@ -18,5 +19,8 @@ class REQUESTSYSTEM_API URequestWidget : public UUserWidget
 public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Ref")
 	ARequestManager* RequestManager;
-	
+
+
+	UFUNCTION(BlueprintImplementableEvent, BlueprintCallable)
+	void OnInject();
 };

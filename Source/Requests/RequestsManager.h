@@ -36,7 +36,8 @@ public:
 
 	void StartInteraction();
 	void CancelInteraction();
-	
+
+	FReport GenerateReport();	
 	FRequest* GenerateRequest();
 
 	UPROPERTY(BlueprintAssignable, Category = "Delegates")
@@ -52,8 +53,9 @@ private:
 	virtual void BeginPlay() override;
 	
 	FString GenerateBirth();
-	const FHandwrittenLetter& GenerateLetter(bool p_isAcceptable);
+	FHandwrittenLetter GenerateLetter(bool p_isAcceptable);
 	ApproveType GenerateApproveType();
+	
 
 	void IsBlendingSetFalse();
 	void IsInteractingSetFalse();

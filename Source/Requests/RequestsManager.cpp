@@ -94,12 +94,14 @@ FRequest* ARequestManager::GenerateRequest()
 	ApproveType approveType = GenerateApproveType();
 	FHandwrittenLetter Letter = GenerateLetter(approveType == ApproveType::Approved);
 
+	FReport report = GenerateReport();
+	
 	if (m_CurrentRequest != nullptr)
 	{
 		delete m_CurrentRequest;
 	}
 
-	m_CurrentRequest = new FRequest(randomName, randomSurname, BirthDate, approveType, Letter);
+	m_CurrentRequest = new FRequest(randomName, randomSurname, BirthDate, approveType, Letter, report);
 
 	return m_CurrentRequest;
 }
@@ -116,7 +118,7 @@ FString ARequestManager::GenerateBirth()
 	return birthDate;
 }
 
-const FHandwrittenLetter& ARequestManager::GenerateLetter(bool p_good)
+FHandwrittenLetter ARequestManager::GenerateLetter(bool p_good)
 {
 	if (p_good)
 	{
@@ -136,10 +138,27 @@ const FHandwrittenLetter& ARequestManager::GenerateLetter(bool p_good)
 ApproveType ARequestManager::GenerateApproveType()
 {
 	int Possibilites = StaticEnum<ApproveType>()->GetMaxEnumValue();
-	int value = FMath::RandRange(0, Possibilites );
+	int value = FMath::RandRange(0, Possibilites);
 
 	return static_cast<ApproveType>(value);
 }
+
+FReport ARequestManager::GenerateReport()
+{
+	int PossibilitesForSign = RequestData->Signs.Num();
+	int RandomSignValue = FMath::RandRange(0, PossibilitesForSign - 1);
+
+	// TODO Bad reports
+	int PossibilitiesReport = RequestData->GoodReports.Num();
+	int RandomReport = FMath::RandRange(0, PossibilitiesReport - 1);
+	
+	FString Sign = RequestData->Signs[RandomSignValue];
+	FString Text = RequestData->GoodReports[RandomReport];
+	
+	return FReport(Sign, false, Text);
+}
+
+
 
 #pragma endregion
 
