@@ -8,7 +8,7 @@ public class RequestSystem : ModuleRules
 	{
 		PCHUsage = PCHUsageMode.UseExplicitOrSharedPCHs;
 	
-		PublicDependencyModuleNames.AddRange(new string[] { "Core", "CoreUObject", "Engine", "InputCore" });
+		PublicDependencyModuleNames.AddRange(new string[] { "Core", "CoreUObject", "Engine", "InputCore", "InteractionSystem", "Sicilian" });
 
 		PrivateDependencyModuleNames.AddRange(new string[] {  });
 

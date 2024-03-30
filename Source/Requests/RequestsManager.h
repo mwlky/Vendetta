@@ -5,6 +5,8 @@
 #include "CoreMinimal.h"
 #include "Requests/FRequest.h"
 #include "Requests/RequestsData.h"
+#include "Sicilian/PlayerCharacter.h"
+#include "Kismet/GameplayStatics.h"
 #include "RequestsManager.generated.h"
 
 UDELEGATE(BlueprintAuthorityOnly)
@@ -24,12 +26,6 @@ class REQUESTSYSTEM_API ARequestManager : public AActor
 public:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Request")
 	float BlendTime = 1.f;
-
-	UPROPERTY(BlueprintReadOnly, Category = "Request")
-	bool bIsDuringBlend = false;
-
-	UPROPERTY(BlueprintReadOnly, Category = "Request")
-	bool bIsInteracting = false;
 	
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Request")
 	class URequestsData* RequestData = nullptr;
@@ -63,4 +59,5 @@ private:
 
 private:
 	FRequest* m_CurrentRequest = nullptr;
+	APlayerCharacter* m_PlayerCharacter = nullptr;
 };

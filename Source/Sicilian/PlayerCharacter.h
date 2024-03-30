@@ -3,8 +3,11 @@
 #pragma once
 
 #include "CoreMinimal.h"
+
 #include "Camera/CameraComponent.h"
 #include "GameFramework/Character.h"
+#include "InteractionSystem/Interactable.h"
+
 #include "PlayerCharacter.generated.h"
 
 UCLASS()
@@ -35,4 +38,10 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	bool bIsDuringRequest;
+
+	UPROPERTY(BlueprintReadOnly)
+	bool bIsInteracting = false;
+
+	UPROPERTY(BlueprintReadOnly)
+	bool bIsBlending = false;
 };

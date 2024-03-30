@@ -5,13 +5,16 @@
 void ARequestManager::BeginPlay()
 {
 	GenerateRequest();
+
+	ACharacter* Character = UGameplayStatics::GetPlayerCharacter(this, 0);
+	m_PlayerCharacter = Cast<APlayerCharacter>(Character);
 }
 
 #pragma region === Interaction Logic ====
 
 void ARequestManager::StartInteraction()
 {
-	if (bIsInteracting)
+	if (m_PlayerCharacter->bIsInteracting)
 	{
 		return;
 	}
@@ -32,14 +35,14 @@ void ARequestManager::StartInteraction()
 	InteractionStarted.Broadcast();
 	
 	FTimerHandle Handle;
-	bIsDuringBlend = true;
-	bIsInteracting = true;
+	m_PlayerCharacter->bIsBlending = true;
+	m_PlayerCharacter->bIsInteracting = true;
 	GetWorldTimerManager().SetTimer(Handle, this, &ARequestManager::IsBlendingSetFalse, BlendTime, false);
 }
 
 void ARequestManager::CancelInteraction()
 {
-	if (!bIsInteracting)
+	if (!m_PlayerCharacter->bIsInteracting)
 	{
 		return;
 	}
@@ -55,7 +58,7 @@ void ARequestManager::CancelInteraction()
 	FTimerHandle InteractingHandle;
 	FTimerHandle BlendingHandle;
 	
-	bIsDuringBlend = true;
+	m_PlayerCharacter->bIsBlending = true;
 	GetWorldTimerManager().SetTimer(InteractingHandle, this, &ARequestManager::IsInteractingSetFalse, BlendTime, false);
 	GetWorldTimerManager().SetTimer(BlendingHandle, this, &ARequestManager::IsBlendingSetFalse, BlendTime, false);
 	InteractionFinished.Broadcast();
@@ -63,12 +66,12 @@ void ARequestManager::CancelInteraction()
 
 void ARequestManager::IsBlendingSetFalse()
 {
-	bIsDuringBlend = false;
+	m_PlayerCharacter->bIsBlending = false;
 }
 
 void ARequestManager::IsInteractingSetFalse()
 {
-	bIsInteracting = false;
+	m_PlayerCharacter->bIsInteracting = false;
 }
 #pragma endregion
 
