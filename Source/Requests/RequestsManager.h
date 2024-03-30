@@ -7,6 +7,7 @@
 #include "Requests/RequestsData.h"
 #include "Sicilian/PlayerCharacter.h"
 #include "Kismet/GameplayStatics.h"
+#include "Camera/CameraActor.h"
 #include "RequestsManager.generated.h"
 
 UDELEGATE(BlueprintAuthorityOnly)
@@ -31,7 +32,7 @@ public:
 	class URequestsData* RequestData = nullptr;
 
 	UPROPERTY(EditAnywhere, Category = "References")
-	class AActor* CameraActor;
+	ACameraActor* CameraActor;
 
 	void StartInteraction();
 	void CancelInteraction();

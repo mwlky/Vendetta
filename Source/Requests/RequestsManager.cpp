@@ -15,20 +15,19 @@ void ARequestManager::BeginPlay()
 void ARequestManager::StartInteraction()
 {
 	if (m_PlayerCharacter->bIsInteracting)
-	{
 		return;
-	}
 	
 	if (!CameraActor)
-	{
 		return;
-	}
 
 	RequestGenerated.Broadcast(*m_CurrentRequest);
 
-	APlayerController* controller = GetWorld()->GetFirstPlayerController();
-
-	controller->SetViewTargetWithBlend(CameraActor, BlendTime);
+	APlayerController* controller = UGameplayStatics::GetPlayerController(this, 0);
+	
+	if (!controller)
+		return;
+	
+	controller->SetViewTargetWithBlend(CameraActor, BlendTime, VTBlend_Linear);
 	controller->bShowMouseCursor = true;
 	controller->bEnableClickEvents = true;
 	controller->bEnableMouseOverEvents = true;
@@ -47,20 +46,25 @@ void ARequestManager::CancelInteraction()
 		return;
 	}
 
-	APlayerController* controller = GetWorld()->GetFirstPlayerController();
+	APlayerController* controller = UGameplayStatics::GetPlayerController(this, 0);
+	
+	if (!controller)
+		return;
 
 	controller->bShowMouseCursor = false;
 	controller->bEnableClickEvents = false;
 	controller->bEnableMouseOverEvents = false;
-	controller->SetViewTargetWithBlend(GetWorld()->GetFirstPlayerController()->GetPawn(),
-																   BlendTime, VTBlend_Cubic);
+	
+	controller->SetViewTargetWithBlend(m_PlayerCharacter, BlendTime);
 
 	FTimerHandle InteractingHandle;
 	FTimerHandle BlendingHandle;
 	
 	m_PlayerCharacter->bIsBlending = true;
+	
 	GetWorldTimerManager().SetTimer(InteractingHandle, this, &ARequestManager::IsInteractingSetFalse, BlendTime, false);
 	GetWorldTimerManager().SetTimer(BlendingHandle, this, &ARequestManager::IsBlendingSetFalse, BlendTime, false);
+	
 	InteractionFinished.Broadcast();
 }
 
