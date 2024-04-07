@@ -37,9 +37,9 @@ public:
 	void StartInteraction();
 	void CancelInteraction();
 
-	FReport GenerateReport();	
-	FRequest* GenerateRequest();
-
+	UFUNCTION(BlueprintCallable)
+	FRequest GenerateRequest();
+	
 	UPROPERTY(BlueprintAssignable, Category = "Delegates")
 	FOnInteractionStarted InteractionStarted;
 	
@@ -53,7 +53,9 @@ private:
 	virtual void BeginPlay() override;
 	
 	FString GenerateBirth();
-	FHandwrittenLetter GenerateLetter(bool p_isAcceptable);
+	bool DrawIsAcceptable();
+	FHandwrittenLetter GenerateLetter();
+	FReport GenerateReport();
 	ApproveType GenerateApproveType();
 	
 

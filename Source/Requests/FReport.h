@@ -8,7 +8,7 @@ struct FReport
 	GENERATED_BODY()
 	
 	FReport() = default;
-	FReport(FString sign, bool isFake, FString text);
+	FReport(FString sign, bool isAcceptable, FString text);
 
 	UPROPERTY(BlueprintReadOnly)
 	FString Text;
@@ -17,5 +17,5 @@ struct FReport
 	FString Sign;
 
 	UPROPERTY(BlueprintReadOnly)
-	bool bIsFake;
+	bool bIsAcceptable;
 };

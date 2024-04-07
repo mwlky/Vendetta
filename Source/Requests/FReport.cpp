@@ -1,9 +1,9 @@
 ﻿#include "FReport.h"
 
-FReport::FReport(FString sign, bool isFake, FString text)
+FReport::FReport(FString sign, bool isAcceptable, FString text)
 {
 	Sign = sign;
 	Text = text;
 	
-	bIsFake = isFake;
+	bIsAcceptable = isAcceptable;
 }

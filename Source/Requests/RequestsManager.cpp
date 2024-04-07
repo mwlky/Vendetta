@@ -16,23 +16,23 @@ void ARequestManager::StartInteraction()
 {
 	if (m_PlayerCharacter->bIsInteracting)
 		return;
-	
+
 	if (!CameraActor)
 		return;
 
-	RequestGenerated.Broadcast(*m_CurrentRequest);
+	GenerateRequest();
 
 	APlayerController* controller = UGameplayStatics::GetPlayerController(this, 0);
-	
+
 	if (!controller)
 		return;
-	
+
 	controller->SetViewTargetWithBlend(CameraActor, BlendTime, VTBlend_Linear);
 	controller->bShowMouseCursor = true;
 	controller->bEnableClickEvents = true;
 	controller->bEnableMouseOverEvents = true;
 	InteractionStarted.Broadcast();
-	
+
 	FTimerHandle Handle;
 	m_PlayerCharacter->bIsBlending = true;
 	m_PlayerCharacter->bIsInteracting = true;
@@ -47,24 +47,24 @@ void ARequestManager::CancelInteraction()
 	}
 
 	APlayerController* controller = UGameplayStatics::GetPlayerController(this, 0);
-	
+
 	if (!controller)
 		return;
 
 	controller->bShowMouseCursor = false;
 	controller->bEnableClickEvents = false;
 	controller->bEnableMouseOverEvents = false;
-	
+
 	controller->SetViewTargetWithBlend(m_PlayerCharacter, BlendTime);
 
 	FTimerHandle InteractingHandle;
 	FTimerHandle BlendingHandle;
-	
+
 	m_PlayerCharacter->bIsBlending = true;
-	
+
 	GetWorldTimerManager().SetTimer(InteractingHandle, this, &ARequestManager::IsInteractingSetFalse, BlendTime, false);
 	GetWorldTimerManager().SetTimer(BlendingHandle, this, &ARequestManager::IsBlendingSetFalse, BlendTime, false);
-	
+
 	InteractionFinished.Broadcast();
 }
 
@@ -81,29 +81,42 @@ void ARequestManager::IsInteractingSetFalse()
 
 #pragma region === Generate ===
 
-FRequest* ARequestManager::GenerateRequest()
-{	
+FRequest ARequestManager::GenerateRequest()
+{
 	int randomNameNumber = FMath::RandRange(0, RequestData->Names.Num() - 1);
 	FString randomName = RequestData->Names[randomNameNumber];
 
 	int randomSurnameNumber = FMath::RandRange(0, RequestData->Surnames.Num() - 1);
 	FString randomSurname = RequestData->Surnames[randomSurnameNumber];
-	
+
 	FString BirthDate = GenerateBirth();
-	
-	ApproveType approveType = GenerateApproveType();
-	FHandwrittenLetter Letter = GenerateLetter(approveType == ApproveType::Approved);
+
+	FHandwrittenLetter Letter = GenerateLetter();
 
 	FReport report = GenerateReport();
-	
+
 	if (m_CurrentRequest != nullptr)
 	{
 		delete m_CurrentRequest;
 	}
 
-	m_CurrentRequest = new FRequest(randomName, randomSurname, BirthDate, approveType, Letter, report);
+	ApproveType Approve = ApproveType::Approved;
+	if (!report.bIsAcceptable)
+	{
+		UE_LOG(LogTemp, Warning, TEXT("Unacceptable cause of report!"));
+		Approve = ApproveType::Denied;
+	}
 
-	return m_CurrentRequest;
+	else if (!Letter.bIsAcceptable)
+	{
+		UE_LOG(LogTemp, Warning, TEXT("Unacceptable cause of letter!"));
+		Approve = ApproveType::Denied;
+	}
+	
+	m_CurrentRequest = new FRequest(randomName, randomSurname, BirthDate, Approve, Letter, report);
+	RequestGenerated.Broadcast(*m_CurrentRequest);
+	
+	return *m_CurrentRequest;
 }
 
 FString ARequestManager::GenerateBirth()
@@ -118,9 +131,17 @@ FString ARequestManager::GenerateBirth()
 	return birthDate;
 }
 
-FHandwrittenLetter ARequestManager::GenerateLetter(bool p_good)
+bool ARequestManager::DrawIsAcceptable()
 {
-	if (p_good)
+	int Draw = FMath::RandRange(0, 100);
+	return Draw > RequestData->ChanceForUnacceptableLetter;
+}
+
+FHandwrittenLetter ARequestManager::GenerateLetter()
+{
+	bool bIsAcceptable = DrawIsAcceptable();
+
+	if (bIsAcceptable)
 	{
 		int Numbers = RequestData->GoodLetters.Num();
 		int Value = FMath::RandRange(0, Numbers - 1);
@@ -128,11 +149,10 @@ FHandwrittenLetter ARequestManager::GenerateLetter(bool p_good)
 		return RequestData->GoodLetters[Value];
 	}
 
-	// TODO unaccetable letters
-	int Numbers = RequestData->GoodLetters.Num();
+	int Numbers = RequestData->UnacceptableLetters.Num();
 	int Value = FMath::RandRange(0, Numbers - 1);
 
-	return RequestData->GoodLetters[Value];
+	return RequestData->UnacceptableLetters[Value];
 }
 
 ApproveType ARequestManager::GenerateApproveType()
@@ -145,21 +165,31 @@ ApproveType ARequestManager::GenerateApproveType()
 
 FReport ARequestManager::GenerateReport()
 {
+	// TODO Fake sings
 	int PossibilitesForSign = RequestData->Signs.Num();
 	int RandomSignValue = FMath::RandRange(0, PossibilitesForSign - 1);
 
-	// TODO Bad reports
-	int PossibilitiesReport = RequestData->GoodReports.Num();
-	int RandomReport = FMath::RandRange(0, PossibilitiesReport - 1);
-	
 	FString Sign = RequestData->Signs[RandomSignValue];
-	FString Text = RequestData->GoodReports[RandomReport];
-	
-	return FReport(Sign, false, Text);
+	FString Text;
+
+	bool bAcceptable = DrawIsAcceptable();
+
+	if (bAcceptable)
+	{
+		int PossibilitiesReport = RequestData->GoodReports.Num();
+		int RandomReport = FMath::RandRange(0, PossibilitiesReport - 1);
+		Text = RequestData->GoodReports[RandomReport];
+	}
+
+	else
+	{
+		int PossibilitiesReport = RequestData->BadReports.Num();
+		int RandomReport = FMath::RandRange(0, PossibilitiesReport - 1);
+		Text = RequestData->BadReports[RandomReport];
+	}
+
+	return FReport(Sign, bAcceptable, Text);
 }
 
 
-
 #pragma endregion
-
-

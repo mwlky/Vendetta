@@ -34,6 +34,9 @@ struct FHandwrittenLetter
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	RequestType RequestType;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	bool bIsAcceptable = false;
 };
 
 UCLASS()
@@ -43,6 +46,9 @@ class REQUESTSYSTEM_API URequestsData : public UPrimaryDataAsset
 
 public:
 
+	UPROPERTY(EditAnywhere)
+	int ChanceForUnacceptableLetter;
+	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	TArray<FString> Names;
 
@@ -58,6 +64,9 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (MultiLine = true))
 	TArray<FString> GoodReports;
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (MultiLine = true))
+	TArray<FString> BadReports;
+	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (MultiLine = true))
 	TArray<FString> Signs;
 };
