@@ -8,6 +8,9 @@ void ARequestManager::BeginPlay()
 
 	ACharacter* Character = UGameplayStatics::GetPlayerCharacter(this, 0);
 	m_PlayerCharacter = Cast<APlayerCharacter>(Character);
+
+	m_PlayerRequest = new FRequest;
+	m_PlayerRequest->Letter = FHandwrittenLetter();
 }
 
 #pragma region === Interaction Logic ====
@@ -66,6 +69,34 @@ void ARequestManager::CancelInteraction()
 	GetWorldTimerManager().SetTimer(BlendingHandle, this, &ARequestManager::IsBlendingSetFalse, BlendTime, false);
 
 	InteractionFinished.Broadcast();
+}
+
+void ARequestManager::UpdateRequestType(RequestType p_type)
+{
+	m_PlayerRequest->Letter.RequestType = p_type;
+}
+
+void ARequestManager::UpdatePlayerDecision(ApproveType p_type)
+{
+	m_PlayerRequest->Type = p_type;
+}
+
+bool ARequestManager::VerifyRequest()
+{
+	if (m_CurrentRequest->Letter.RequestType != m_PlayerRequest->Letter.RequestType)
+	{
+		UE_LOG(LogTemp, Warning, TEXT("Wrong request type!"))
+		return false;
+	}
+
+	if (m_CurrentRequest->Type != m_PlayerRequest->Type)
+	{
+		UE_LOG(LogTemp, Warning, TEXT("Wrong decision!"))
+		return false;
+	}
+
+	UE_LOG(LogTemp, Warning, TEXT("Good!"))
+	return true;
 }
 
 void ARequestManager::IsBlendingSetFalse()

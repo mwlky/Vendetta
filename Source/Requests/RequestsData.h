@@ -6,14 +6,14 @@
 #include "Engine/DataAsset.h"
 #include "RequestsData.generated.h"
 
-UENUM()
+UENUM(BlueprintType)
 enum class ApproveType : uint8
 {
 	Approved = 0,
 	Denied   = 1,
 };
 
-UENUM()
+UENUM(BlueprintType)
 enum class RequestType : uint8
 {
 	Vacation       = 0,

@@ -38,6 +38,15 @@ public:
 	void CancelInteraction();
 
 	UFUNCTION(BlueprintCallable)
+	void UpdateRequestType(RequestType p_type);
+
+	UFUNCTION(BlueprintCallable)
+	void UpdatePlayerDecision(ApproveType p_type);
+
+	UFUNCTION(BlueprintCallable)
+	bool VerifyRequest();
+	
+	UFUNCTION(BlueprintCallable)
 	FRequest GenerateRequest();
 	
 	UPROPERTY(BlueprintAssignable, Category = "Delegates")
@@ -63,6 +72,8 @@ private:
 	void IsInteractingSetFalse();
 
 private:
+	FRequest* m_PlayerRequest = nullptr;
 	FRequest* m_CurrentRequest = nullptr;
+	
 	APlayerCharacter* m_PlayerCharacter = nullptr;
 };
