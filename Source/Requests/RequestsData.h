@@ -7,21 +7,23 @@
 #include "RequestsData.generated.h"
 
 UENUM(BlueprintType)
-enum class ApproveType : uint8
+enum class EApproveType : uint8
 {
-	Approved = 0,
-	Denied   = 1,
+	None     = 0,
+	Approved = 1,
+	Denied   = 2,
 };
 
 UENUM(BlueprintType)
-enum class RequestType : uint8
+enum class ERequestType : uint8
 {
-	Vacation       = 0,
-	TimeOffWithPay = 1,
-	SickTime       = 2,
-	MilitaryLeave  = 3,
-	PersonalDay    = 4,
-	BereavementDay = 5
+	None           = 0,
+	Vacation       = 1,
+	TimeOffWithPay = 2,
+	SickTime       = 3,
+	MilitaryLeave  = 4,
+	PersonalDay    = 5,
+	BereavementDay = 6
 };
 
 USTRUCT(BlueprintType)
@@ -33,7 +35,7 @@ struct FHandwrittenLetter
 	FString LetterText;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	RequestType RequestType;
+	ERequestType RequestType = ERequestType::None;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	bool bIsAcceptable = false;

@@ -7,9 +7,9 @@
 #include "Requests/RequestsData.h"
 #include "Sicilian/PlayerCharacter.h"
 #include "Kismet/GameplayStatics.h"
-#include "Camera/CameraActor.h"
 #include "RequestsManager.generated.h"
 
+class ASicilianPlayerController;
 UDELEGATE(BlueprintAuthorityOnly)
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnInteractionStarted);
 
@@ -26,9 +26,6 @@ class REQUESTSYSTEM_API ARequestManager : public AActor
 	
 public:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Request")
-	float BlendTime = 1.f;
-	
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Request")
 	class URequestsData* RequestData = nullptr;
 
 	UPROPERTY(EditAnywhere, Category = "References")
@@ -38,13 +35,16 @@ public:
 	void CancelInteraction();
 
 	UFUNCTION(BlueprintCallable)
-	void UpdateRequestType(RequestType p_type);
+	void UpdateRequestType(ERequestType p_type);
 
 	UFUNCTION(BlueprintCallable)
-	void UpdatePlayerDecision(ApproveType p_type);
+	void UpdatePlayerDecision(EApproveType p_type);
 
 	UFUNCTION(BlueprintCallable)
 	bool VerifyRequest();
+
+	UFUNCTION(BlueprintCallable)
+	bool TrySign();
 	
 	UFUNCTION(BlueprintCallable)
 	FRequest GenerateRequest();
@@ -65,15 +65,12 @@ private:
 	bool DrawIsAcceptable();
 	FHandwrittenLetter GenerateLetter();
 	FReport GenerateReport();
-	ApproveType GenerateApproveType();
-	
-
-	void IsBlendingSetFalse();
-	void IsInteractingSetFalse();
+	EApproveType GenerateApproveType();
 
 private:
 	FRequest* m_PlayerRequest = nullptr;
 	FRequest* m_CurrentRequest = nullptr;
 	
 	APlayerCharacter* m_PlayerCharacter = nullptr;
+	ASicilianPlayerController* m_PlayerController = nullptr;
 };

@@ -1,8 +1,16 @@
 #include "PlayerCharacter.h"
 
+#include "Camera/CameraComponent.h"
+#include "Components/CapsuleComponent.h"
+
 APlayerCharacter::APlayerCharacter()
 {
 	PrimaryActorTick.bCanEverTick = true;
+
+	USceneComponent* SceneComponent = Cast<USceneComponent>(GetCapsuleComponent());
+	
+	m_CameraComponent = CreateDefaultSubobject<UCameraComponent>(TEXT("Camera"));
+	m_CameraComponent->SetupAttachment(SceneComponent);
 }
 
 void APlayerCharacter::BeginPlay()
@@ -37,20 +45,18 @@ void APlayerCharacter::TryInteract(UCameraComponent* CameraComponent, bool Cance
 	FVector start = location;
 	FVector end = forwardVector * InteractionDistance + location;
 
-	FHitResult hit;
+	FHitResult OutHit;
 
 	FCollisionQueryParams Params;
 	Params.AddIgnoredActor(this);
 	Params.TraceTag = FName("InteractableTrace");
 	
-	if(GetWorld()->LineTraceSingleByChannel(hit, start, end, ECC_GameTraceChannel1, Params))
+	if(GetWorld()->LineTraceSingleByChannel(OutHit, start, end, ECC_GameTraceChannel1, Params))
 	{
-		AInteractable* Interactable = Cast<AInteractable>(hit.GetActor());
+		AInteractable* Interactable = Cast<AInteractable>(OutHit.GetActor());
 
 		if (Interactable == nullptr)
-		{
 			return;
-		}
 
 		if (Cancel)
 		{
@@ -59,8 +65,15 @@ void APlayerCharacter::TryInteract(UCameraComponent* CameraComponent, bool Cance
 		}
 
 		Interactable->Interact();
+		
+		m_CurrentInteractable = Interactable;
 	}
 }
 
+void APlayerCharacter::CancelInteraction() const
+{
+	if (m_CurrentInteractable == nullptr)
+		return;
 
-
+	m_CurrentInteractable->CancelInteraction();
+}

@@ -4,7 +4,6 @@
 
 #include "CoreMinimal.h"
 
-#include "Camera/CameraComponent.h"
 #include "GameFramework/Character.h"
 #include "InteractionSystem/Interactable.h"
 
@@ -21,13 +20,15 @@ public:
 protected:
 	virtual void BeginPlay() override;
 
-public:	
+public:
 	virtual void Tick(float DeltaTime) override;
 
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
 	UFUNCTION(BlueprintCallable)
-	void TryInteract(UCameraComponent* CameraComponent, bool Cancel);
+	void TryInteract(class UCameraComponent* CameraComponent, bool Cancel);
+
+	void CancelInteraction() const;
 
 public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
@@ -44,4 +45,12 @@ public:
 
 	UPROPERTY(BlueprintReadOnly)
 	bool bIsBlending = false;
+
+	UCameraComponent* GetCamera() const { return m_CameraComponent; }
+
+private:
+	AInteractable* m_CurrentInteractable = nullptr;
+
+	UPROPERTY(EditAnywhere, meta = (AllowPrivateAccess = "true"), BlueprintReadOnly)
+	class UCameraComponent* m_CameraComponent = nullptr;
 };

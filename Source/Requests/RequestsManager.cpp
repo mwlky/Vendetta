@@ -2,12 +2,18 @@
 
 #include "RequestsManager.h"
 
+#include "SicilianPlayerController.h"
+#include "Camera/CameraActor.h"
+
 void ARequestManager::BeginPlay()
 {
-	GenerateRequest();
+	Super::BeginPlay();
 
 	ACharacter* Character = UGameplayStatics::GetPlayerCharacter(this, 0);
 	m_PlayerCharacter = Cast<APlayerCharacter>(Character);
+
+	APlayerController* PlayerController = UGameplayStatics::GetPlayerController(this, 0);
+	m_PlayerController = Cast<ASicilianPlayerController>(PlayerController);
 
 	m_PlayerRequest = new FRequest;
 	m_PlayerRequest->Letter = FHandwrittenLetter();
@@ -17,66 +23,39 @@ void ARequestManager::BeginPlay()
 
 void ARequestManager::StartInteraction()
 {
-	if (m_PlayerCharacter->bIsInteracting)
+	if (m_PlayerCharacter->bIsInteracting || m_CurrentRequest->bIsSigned)
 		return;
 
 	if (!CameraActor)
 		return;
 
-	GenerateRequest();
-
-	APlayerController* controller = UGameplayStatics::GetPlayerController(this, 0);
-
-	if (!controller)
+	if (!m_PlayerController)
 		return;
 
-	controller->SetViewTargetWithBlend(CameraActor, BlendTime, VTBlend_Linear);
-	controller->bShowMouseCursor = true;
-	controller->bEnableClickEvents = true;
-	controller->bEnableMouseOverEvents = true;
-	InteractionStarted.Broadcast();
+	m_PlayerController->SwitchCameraView(CameraActor, true);
 
-	FTimerHandle Handle;
-	m_PlayerCharacter->bIsBlending = true;
-	m_PlayerCharacter->bIsInteracting = true;
-	GetWorldTimerManager().SetTimer(Handle, this, &ARequestManager::IsBlendingSetFalse, BlendTime, false);
+	InteractionStarted.Broadcast();
 }
 
 void ARequestManager::CancelInteraction()
 {
 	if (!m_PlayerCharacter->bIsInteracting)
-	{
-		return;
-	}
-
-	APlayerController* controller = UGameplayStatics::GetPlayerController(this, 0);
-
-	if (!controller)
 		return;
 
-	controller->bShowMouseCursor = false;
-	controller->bEnableClickEvents = false;
-	controller->bEnableMouseOverEvents = false;
+	if (!m_PlayerController)
+		return;
 
-	controller->SetViewTargetWithBlend(m_PlayerCharacter, BlendTime);
-
-	FTimerHandle InteractingHandle;
-	FTimerHandle BlendingHandle;
-
-	m_PlayerCharacter->bIsBlending = true;
-
-	GetWorldTimerManager().SetTimer(InteractingHandle, this, &ARequestManager::IsInteractingSetFalse, BlendTime, false);
-	GetWorldTimerManager().SetTimer(BlendingHandle, this, &ARequestManager::IsBlendingSetFalse, BlendTime, false);
+	m_PlayerController->SwitchCameraToPlayerDefault();
 
 	InteractionFinished.Broadcast();
 }
 
-void ARequestManager::UpdateRequestType(RequestType p_type)
+void ARequestManager::UpdateRequestType(ERequestType p_type)
 {
 	m_PlayerRequest->Letter.RequestType = p_type;
 }
 
-void ARequestManager::UpdatePlayerDecision(ApproveType p_type)
+void ARequestManager::UpdatePlayerDecision(EApproveType p_type)
 {
 	m_PlayerRequest->Type = p_type;
 }
@@ -99,14 +78,22 @@ bool ARequestManager::VerifyRequest()
 	return true;
 }
 
-void ARequestManager::IsBlendingSetFalse()
+bool ARequestManager::TrySign()
 {
-	m_PlayerCharacter->bIsBlending = false;
-}
+	if (m_PlayerRequest->Type == EApproveType::None)
+	{
+		return false;
+	}
 
-void ARequestManager::IsInteractingSetFalse()
-{
-	m_PlayerCharacter->bIsInteracting = false;
+	if (m_PlayerRequest->Letter.RequestType == ERequestType::None)
+	{
+		return false;
+	}
+
+	CancelInteraction();
+	m_CurrentRequest->bIsSigned = true;
+
+	return true;
 }
 #pragma endregion
 
@@ -131,22 +118,22 @@ FRequest ARequestManager::GenerateRequest()
 		delete m_CurrentRequest;
 	}
 
-	ApproveType Approve = ApproveType::Approved;
+	EApproveType Approve = EApproveType::Approved;
 	if (!report.bIsAcceptable)
 	{
 		UE_LOG(LogTemp, Warning, TEXT("Unacceptable cause of report!"));
-		Approve = ApproveType::Denied;
+		Approve = EApproveType::Denied;
 	}
 
 	else if (!Letter.bIsAcceptable)
 	{
 		UE_LOG(LogTemp, Warning, TEXT("Unacceptable cause of letter!"));
-		Approve = ApproveType::Denied;
+		Approve = EApproveType::Denied;
 	}
-	
+
 	m_CurrentRequest = new FRequest(randomName, randomSurname, BirthDate, Approve, Letter, report);
 	RequestGenerated.Broadcast(*m_CurrentRequest);
-	
+
 	return *m_CurrentRequest;
 }
 
@@ -186,12 +173,12 @@ FHandwrittenLetter ARequestManager::GenerateLetter()
 	return RequestData->UnacceptableLetters[Value];
 }
 
-ApproveType ARequestManager::GenerateApproveType()
+EApproveType ARequestManager::GenerateApproveType()
 {
-	int Possibilites = StaticEnum<ApproveType>()->GetMaxEnumValue();
+	int Possibilites = StaticEnum<EApproveType>()->GetMaxEnumValue();
 	int value = FMath::RandRange(0, Possibilites);
 
-	return static_cast<ApproveType>(value);
+	return static_cast<EApproveType>(value);
 }
 
 FReport ARequestManager::GenerateReport()

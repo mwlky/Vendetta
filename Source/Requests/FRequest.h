@@ -10,7 +10,7 @@ struct FRequest
 	GENERATED_BODY()
 
 	FRequest() = default;
-	FRequest(FString name, FString surname, FString birth, ApproveType approveType, FHandwrittenLetter letter,
+	FRequest(FString name, FString surname, FString birth, EApproveType approveType, FHandwrittenLetter letter,
 	         FReport report);
 
 	UPROPERTY(BlueprintReadOnly)
@@ -26,8 +26,10 @@ struct FRequest
 	FHandwrittenLetter Letter;
 
 	UPROPERTY(BlueprintReadOnly)
-	ApproveType Type;
+	EApproveType Type = EApproveType::None;
 
 	UPROPERTY(BlueprintReadOnly)
 	FReport ReportData;
+
+	bool bIsSigned = false;
 };

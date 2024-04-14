@@ -1,6 +1,6 @@
 ﻿#include "FRequest.h"
 
-FRequest::FRequest(FString name, FString surname, FString birth, ApproveType approveType, FHandwrittenLetter letter,
+FRequest::FRequest(FString name, FString surname, FString birth, EApproveType approveType, FHandwrittenLetter letter,
                    FReport report)
 {
 	Letter = letter;
