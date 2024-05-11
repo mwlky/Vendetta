@@ -15,6 +15,12 @@ void ARequestManager::BeginPlay()
 
 #pragma region === Interaction Logic ====
 
+void ARequestManager::PickUpRequest()
+{
+	UE_LOG(LogTemp, Warning, TEXT("PickedUP"));
+	m_PlayerCharacter->bPickedUpRequest = true;
+}
+
 void ARequestManager::StartInteraction()
 {
 	if (m_PlayerCharacter->bIsInteracting)

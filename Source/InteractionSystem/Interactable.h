@@ -19,7 +19,10 @@ public:
 	virtual void Tick(float DeltaTime) override;
 
 	UFUNCTION(BlueprintCallable)
-	virtual void Interact();
+	virtual void MainInteraction();
+
+	UFUNCTION(BlueprintCallable)
+	virtual void AlternativeInteraction();
 
 	UFUNCTION(BlueprintCallable)
 	virtual void CancelInteraction();

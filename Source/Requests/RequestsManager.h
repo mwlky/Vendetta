@@ -34,6 +34,7 @@ public:
 	UPROPERTY(EditAnywhere, Category = "References")
 	ACameraActor* CameraActor;
 
+	void PickUpRequest();
 	void StartInteraction();
 	void CancelInteraction();
 

@@ -27,7 +27,7 @@ public:
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
 	UFUNCTION(BlueprintCallable)
-	void TryInteract(UCameraComponent* CameraComponent, bool Cancel);
+	void TryInteract(UCameraComponent* CameraComponent, bool Cancel, bool SecondInteraction);
 
 public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
@@ -44,4 +44,6 @@ public:
 
 	UPROPERTY(BlueprintReadOnly)
 	bool bIsBlending = false;
+
+	bool bPickedUpRequest = false;
 };

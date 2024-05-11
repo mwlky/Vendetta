@@ -16,11 +16,23 @@ class SICILIAN_API ARequestInteraction : public AInteractable
 	ARequestInteraction();
 
 public:
-	UPROPERTY(EditAnywhere)
-	class ARequestManager* RequestsManager = nullptr; 
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Dependencies")
+	class ARequestManager* RequestsManager = nullptr;
+	
+	UPROPERTY(EditAnywhere, Category = "Data")
+	FVector PickUpPosition;
+
+	void SetNormalPosition();
 	
 private:
-	virtual void Interact() override;
-	virtual void CancelInteraction() override;
 	virtual void BeginPlay() override;
+	virtual void MainInteraction() override;
+	virtual void CancelInteraction() override;
+	virtual void AlternativeInteraction() override;
+
+	UFUNCTION()
+	void HandleRequest(struct FRequest Request);
+
+	FVector m_NormalPosition = FVector::Zero();
 };

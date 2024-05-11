@@ -20,7 +20,7 @@ void APlayerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCom
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
 }
 
-void APlayerCharacter::TryInteract(UCameraComponent* CameraComponent, bool Cancel)
+void APlayerCharacter::TryInteract(UCameraComponent* CameraComponent, bool Cancel, bool SecondInteraction)
 {
 	if (!CameraComponent)
 	{
@@ -57,8 +57,12 @@ void APlayerCharacter::TryInteract(UCameraComponent* CameraComponent, bool Cance
 			Interactable->CancelInteraction();
 			return;
 		}
-
-		Interactable->Interact();
+		
+		if (SecondInteraction)
+			Interactable->AlternativeInteraction();
+		
+		else
+			Interactable->MainInteraction();
 	}
 }
 

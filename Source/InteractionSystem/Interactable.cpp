@@ -32,7 +32,12 @@ void AInteractable::Tick(float DeltaTime)
 	Super::Tick(DeltaTime);
 }
 
-void AInteractable::Interact()
+void AInteractable::MainInteraction()
+{
+	UE_LOG(LogTemp, Warning, TEXT("Base interaction"));
+}
+
+void AInteractable::AlternativeInteraction()
 {
 	UE_LOG(LogTemp, Warning, TEXT("Base interaction"));
 }
