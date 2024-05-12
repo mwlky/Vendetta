@@ -6,19 +6,34 @@
 
 AARequestHolder::AARequestHolder()
 {
-	PrimaryActorTick.bCanEverTick = true;
+	PrimaryActorTick.bCanEverTick = false;
 
+	Box = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Box"));
+	RootComponent = Box;
 }
 
 void AARequestHolder::BeginPlay()
 {
 	Super::BeginPlay();
-	
+
+	if (m_RequestsManager)
+		m_RequestsManager->RequestPickedUp.AddDynamic(this, &AARequestHolder::HandleRequestPickedUp);
 }
 
 void AARequestHolder::PutRequest()
 {
 	m_RequestsManager->PutRequest();
+	SetOutlineActivity(false);
+}
+
+void AARequestHolder::HandleRequestPickedUp()
+{
+	SetOutlineActivity(true);
+}
+
+void AARequestHolder::SetOutlineActivity(bool Activity)
+{	
+	Box->SetRenderCustomDepth(Activity);
 }
 
 void AARequestHolder::MainInteraction()
@@ -30,10 +45,3 @@ void AARequestHolder::AlternativeInteraction()
 {
 	PutRequest();
 }
-
-void AARequestHolder::Tick(float DeltaTime)
-{
-	Super::Tick(DeltaTime);
-
-}
-

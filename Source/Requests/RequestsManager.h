@@ -17,6 +17,9 @@ UDELEGATE(BlueprintAuthorityOnly)
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnInteractionFinished);
 
 UDELEGATE(BlueprintAuthorityOnly)
+DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnRequestPickedUp);
+
+UDELEGATE(BlueprintAuthorityOnly)
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnRequestGenerated, FRequest, Request);
 
 UCLASS()
@@ -63,6 +66,9 @@ public:
 	UPROPERTY(BlueprintAssignable, Category = "Delegates")
 	FOnRequestGenerated RequestGenerated;
 
+	UPROPERTY(BlueprintAssignable, Category = "Delegates")
+	FOnRequestPickedUp RequestPickedUp;
+	
 private:
 	virtual void BeginPlay() override;
 	

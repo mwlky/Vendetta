@@ -34,6 +34,7 @@ bool ARequestManager::TryPickUpRequest()
 		return false;
 
 	m_PlayerCharacter->bPickedUpRequest = true;
+	RequestPickedUp.Broadcast();
 	return true;
 }
 
@@ -53,13 +54,11 @@ void ARequestManager::StartInteraction()
 	if (!controller)
 		return;
 
-	controller->SetViewTargetWithBlend(CameraActor, BlendTime, VTBlend_Linear);
 	controller->bShowMouseCursor = true;
-	// controller->bEnableClickEvents = true;
-	// controller->bEnableMouseOverEvents = true;
+	controller->SetViewTargetWithBlend(CameraActor, BlendTime, VTBlend_Linear);
 
-	FInputModeUIOnly inputMode;
-	controller->SetInputMode(FInputModeUIOnly());
+	controller->SetInputMode(FInputModeGameAndUI());
+	
 	InteractionStarted.Broadcast();
 
 	FTimerHandle Handle;
@@ -79,10 +78,7 @@ void ARequestManager::CancelInteraction()
 		return;
 
 	controller->bShowMouseCursor = false;
-	// controller->bEnableClickEvents = false;
-	// controller->bEnableMouseOverEvents = false;
 	controller->SetInputMode(FInputModeGameOnly());
-	
 	controller->SetViewTargetWithBlend(m_PlayerCharacter, BlendTime);
 
 	FTimerHandle InteractingHandle;

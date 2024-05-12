@@ -16,16 +16,24 @@ public:
 	AARequestHolder();
 
 protected:
-	virtual void BeginPlay() override;
 	void PutRequest();
+	
+	virtual void BeginPlay() override;
+
+	UFUNCTION()
+	void HandleRequestPickedUp();
 
 public:
+	void SetOutlineActivity(bool Activity);
+	
 	virtual void MainInteraction() override;
 	virtual void AlternativeInteraction() override;
-	virtual void Tick(float DeltaTime) override;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	UStaticMeshComponent* Box = nullptr;
 
 private:
-	UPROPERTY(EditAnywhere)
-	class ARequestManager* m_RequestsManager = nullptr;
 	
+	UPROPERTY(EditAnywhere, Category = "Dependencies")
+	class ARequestManager* m_RequestsManager = nullptr;
 };
