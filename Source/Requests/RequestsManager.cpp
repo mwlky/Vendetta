@@ -2,15 +2,17 @@
 
 #include "RequestsManager.h"
 
+#define DEBUG(x) GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Blue, x);
+
 void ARequestManager::BeginPlay()
 {
-	GenerateRequest();
-
 	ACharacter* Character = UGameplayStatics::GetPlayerCharacter(this, 0);
 	m_PlayerCharacter = Cast<APlayerCharacter>(Character);
 
 	m_PlayerRequest = new FRequest;
 	m_PlayerRequest->Letter = FHandwrittenLetter();
+
+	GenerateRequest();
 }
 
 #pragma region === Interaction Logic ====
@@ -31,7 +33,6 @@ bool ARequestManager::TryPickUpRequest()
 	if (!m_PlayerRequest->bIsSigned)
 		return false;
 
-	UE_LOG(LogTemp, Warning, TEXT("PickedUP"));
 	m_PlayerCharacter->bPickedUpRequest = true;
 	return true;
 }
@@ -54,8 +55,11 @@ void ARequestManager::StartInteraction()
 
 	controller->SetViewTargetWithBlend(CameraActor, BlendTime, VTBlend_Linear);
 	controller->bShowMouseCursor = true;
-	controller->bEnableClickEvents = true;
-	controller->bEnableMouseOverEvents = true;
+	// controller->bEnableClickEvents = true;
+	// controller->bEnableMouseOverEvents = true;
+
+	FInputModeUIOnly inputMode;
+	controller->SetInputMode(FInputModeUIOnly());
 	InteractionStarted.Broadcast();
 
 	FTimerHandle Handle;
@@ -75,9 +79,10 @@ void ARequestManager::CancelInteraction()
 		return;
 
 	controller->bShowMouseCursor = false;
-	controller->bEnableClickEvents = false;
-	controller->bEnableMouseOverEvents = false;
-
+	// controller->bEnableClickEvents = false;
+	// controller->bEnableMouseOverEvents = false;
+	controller->SetInputMode(FInputModeGameOnly());
+	
 	controller->SetViewTargetWithBlend(m_PlayerCharacter, BlendTime);
 
 	FTimerHandle InteractingHandle;
@@ -101,27 +106,33 @@ void ARequestManager::UpdatePlayerDecision(ApproveType p_type)
 	m_PlayerRequest->Type = p_type;
 }
 
-void ARequestManager::SignRequest()
+bool ARequestManager::TrySignRequest()
 {
+	if (m_PlayerRequest->Type == ApproveType::NONE)
+	{
+		DEBUG("No decision for approve!");
+		return false;
+	}
+
+	if (m_PlayerRequest->Letter.RequestType == RequestType::NONE)
+	{
+		DEBUG("No decision for letter!");
+		return false;
+	}
+	
 	m_PlayerRequest->bIsSigned = true;
 	CancelInteraction();
+	return true;
 }
 
 bool ARequestManager::VerifyRequest()
 {
 	if (m_CurrentRequest->Letter.RequestType != m_PlayerRequest->Letter.RequestType)
-	{
-		UE_LOG(LogTemp, Warning, TEXT("Wrong request type!"))
 		return false;
-	}
 
 	if (m_CurrentRequest->Type != m_PlayerRequest->Type)
-	{
-		UE_LOG(LogTemp, Warning, TEXT("Wrong decision!"))
 		return false;
-	}
 
-	UE_LOG(LogTemp, Warning, TEXT("Good!"))
 	return true;
 }
 
@@ -146,30 +157,18 @@ FRequest ARequestManager::GenerateRequest()
 	int randomSurnameNumber = FMath::RandRange(0, RequestData->Surnames.Num() - 1);
 	FString randomSurname = RequestData->Surnames[randomSurnameNumber];
 
+	FReport report = GenerateReport();
 	FString BirthDate = GenerateBirth();
-
 	FHandwrittenLetter Letter = GenerateLetter();
 
-	FReport report = GenerateReport();
-
 	if (m_CurrentRequest != nullptr)
-	{
 		delete m_CurrentRequest;
-	}
 
 	ApproveType Approve = ApproveType::Approved;
-	if (!report.bIsAcceptable)
-	{
-		UE_LOG(LogTemp, Warning, TEXT("Unacceptable cause of report!"));
-		Approve = ApproveType::Denied;
-	}
 
-	else if (!Letter.bIsAcceptable)
-	{
-		UE_LOG(LogTemp, Warning, TEXT("Unacceptable cause of letter!"));
-		Approve = ApproveType::Denied;
-	}
-
+	m_PlayerRequest->bIsSigned = false;
+	m_PlayerCharacter->bPickedUpRequest = false;
+	
 	m_CurrentRequest = new FRequest(randomName, randomSurname, BirthDate, Approve, Letter, report);
 	RequestGenerated.Broadcast(*m_CurrentRequest);
 

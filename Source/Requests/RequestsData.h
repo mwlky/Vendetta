@@ -9,8 +9,9 @@
 UENUM(BlueprintType)
 enum class ApproveType : uint8
 {
-	Approved = 0,
-	Denied   = 1,
+	NONE     = 0,
+	Approved = 1,
+	Denied   = 2,
 };
 
 UENUM(BlueprintType)
@@ -21,7 +22,8 @@ enum class RequestType : uint8
 	SickTime       = 2,
 	MilitaryLeave  = 3,
 	PersonalDay    = 4,
-	BereavementDay = 5
+	BereavementDay = 5,
+	NONE           = 6,
 };
 
 USTRUCT(BlueprintType)
@@ -33,7 +35,7 @@ struct FHandwrittenLetter
 	FString LetterText;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	RequestType RequestType;
+	RequestType RequestType = RequestType::NONE;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	bool bIsAcceptable = false;

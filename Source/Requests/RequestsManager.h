@@ -46,7 +46,7 @@ public:
 	void UpdatePlayerDecision(ApproveType p_type);
 
 	UFUNCTION(BlueprintCallable)
-	void SignRequest();
+	bool TrySignRequest();
 
 	UFUNCTION(BlueprintCallable)
 	bool VerifyRequest();

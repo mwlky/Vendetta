@@ -26,7 +26,7 @@ struct FRequest
 	FHandwrittenLetter Letter;
 
 	UPROPERTY(BlueprintReadOnly)
-	ApproveType Type;
+	ApproveType Type = ApproveType::NONE;
 
 	UPROPERTY(BlueprintReadOnly)
 	FReport ReportData;
