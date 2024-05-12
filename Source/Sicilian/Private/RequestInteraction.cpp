@@ -33,8 +33,9 @@ void ARequestInteraction::CancelInteraction()
 
 void ARequestInteraction::AlternativeInteraction()
 {
-	RequestsManager->PickUpRequest();
-
+	if(!RequestsManager->TryPickUpRequest())
+		return;
+	
 	SetActorLocation(PickUpPosition);
 }
 

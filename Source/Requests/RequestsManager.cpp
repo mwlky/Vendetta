@@ -15,10 +15,25 @@ void ARequestManager::BeginPlay()
 
 #pragma region === Interaction Logic ====
 
-void ARequestManager::PickUpRequest()
+void ARequestManager::PutRequest()
 {
+	if (!m_PlayerCharacter->bPickedUpRequest)
+	{
+		return;
+	}
+
+	m_PlayerCharacter->bPickedUpRequest = false;
+	GenerateRequest();
+}
+
+bool ARequestManager::TryPickUpRequest()	
+{
+	if (!m_PlayerRequest->bIsSigned)
+		return false;
+
 	UE_LOG(LogTemp, Warning, TEXT("PickedUP"));
 	m_PlayerCharacter->bPickedUpRequest = true;
+	return true;
 }
 
 void ARequestManager::StartInteraction()
@@ -26,10 +41,11 @@ void ARequestManager::StartInteraction()
 	if (m_PlayerCharacter->bIsInteracting)
 		return;
 
-	if (!CameraActor)
+	if (m_PlayerRequest->bIsSigned)
 		return;
 
-	GenerateRequest();
+	if (!CameraActor)
+		return;
 
 	APlayerController* controller = UGameplayStatics::GetPlayerController(this, 0);
 
@@ -51,9 +67,7 @@ void ARequestManager::StartInteraction()
 void ARequestManager::CancelInteraction()
 {
 	if (!m_PlayerCharacter->bIsInteracting)
-	{
 		return;
-	}
 
 	APlayerController* controller = UGameplayStatics::GetPlayerController(this, 0);
 
@@ -85,6 +99,12 @@ void ARequestManager::UpdateRequestType(RequestType p_type)
 void ARequestManager::UpdatePlayerDecision(ApproveType p_type)
 {
 	m_PlayerRequest->Type = p_type;
+}
+
+void ARequestManager::SignRequest()
+{
+	m_PlayerRequest->bIsSigned = true;
+	CancelInteraction();
 }
 
 bool ARequestManager::VerifyRequest()
@@ -149,10 +169,10 @@ FRequest ARequestManager::GenerateRequest()
 		UE_LOG(LogTemp, Warning, TEXT("Unacceptable cause of letter!"));
 		Approve = ApproveType::Denied;
 	}
-	
+
 	m_CurrentRequest = new FRequest(randomName, randomSurname, BirthDate, Approve, Letter, report);
 	RequestGenerated.Broadcast(*m_CurrentRequest);
-	
+
 	return *m_CurrentRequest;
 }
 

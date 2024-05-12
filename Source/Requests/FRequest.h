@@ -30,4 +30,6 @@ struct FRequest
 
 	UPROPERTY(BlueprintReadOnly)
 	FReport ReportData;
+
+	bool bIsSigned = false;
 };

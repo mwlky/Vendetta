@@ -34,7 +34,8 @@ public:
 	UPROPERTY(EditAnywhere, Category = "References")
 	ACameraActor* CameraActor;
 
-	void PickUpRequest();
+	void PutRequest();
+	bool TryPickUpRequest();
 	void StartInteraction();
 	void CancelInteraction();
 
@@ -43,6 +44,9 @@ public:
 
 	UFUNCTION(BlueprintCallable)
 	void UpdatePlayerDecision(ApproveType p_type);
+
+	UFUNCTION(BlueprintCallable)
+	void SignRequest();
 
 	UFUNCTION(BlueprintCallable)
 	bool VerifyRequest();
