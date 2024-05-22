@@ -2,6 +2,9 @@
 
 #include "RequestsManager.h"
 
+#include "HudManager.h"
+#include "SicillianPlayerController.h"
+
 #define DEBUG(x) GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Blue, x);
 
 void ARequestManager::BeginPlay()
@@ -9,6 +12,11 @@ void ARequestManager::BeginPlay()
 	ACharacter* Character = UGameplayStatics::GetPlayerCharacter(this, 0);
 	m_PlayerCharacter = Cast<APlayerCharacter>(Character);
 
+	APlayerController* Controller = UGameplayStatics::GetPlayerController(this, 0);
+	m_PlayerController = Cast<ASicillianPlayerController>(Controller);
+
+	m_HudManager = Cast<AHudManager>(Controller->GetHUD());
+	
 	m_PlayerRequest = new FRequest;
 	m_PlayerRequest->Letter = FHandwrittenLetter();
 
@@ -48,16 +56,14 @@ void ARequestManager::StartInteraction()
 
 	if (!CameraActor)
 		return;
-
-	APlayerController* controller = UGameplayStatics::GetPlayerController(this, 0);
-
-	if (!controller)
+	
+	if (!m_PlayerController)
 		return;
 
-	controller->bShowMouseCursor = true;
-	controller->SetViewTargetWithBlend(CameraActor, BlendTime, VTBlend_Linear);
-
-	controller->SetInputMode(FInputModeGameAndUI());
+	m_HudManager->HideDots();
+	m_PlayerController->bShowMouseCursor = true;
+	m_PlayerController->SetInputMode(FInputModeGameAndUI());
+	m_PlayerController->SetViewTargetWithBlend(CameraActor, BlendTime, VTBlend_Linear);
 	
 	InteractionStarted.Broadcast();
 
@@ -71,20 +77,21 @@ void ARequestManager::CancelInteraction()
 {
 	if (!m_PlayerCharacter->bIsInteracting)
 		return;
-
-	APlayerController* controller = UGameplayStatics::GetPlayerController(this, 0);
-
-	if (!controller)
+	
+	if (!m_PlayerController)
 		return;
 
-	controller->bShowMouseCursor = false;
-	controller->SetInputMode(FInputModeGameOnly());
-	controller->SetViewTargetWithBlend(m_PlayerCharacter, BlendTime);
+	if (m_HudManager)
+		m_HudManager->ShowDot();
 
-	FTimerHandle InteractingHandle;
-	FTimerHandle BlendingHandle;
+	m_PlayerController->bShowMouseCursor = false;
+	m_PlayerController->SetInputMode(FInputModeGameOnly());
+	m_PlayerController->SetViewTargetWithBlend(m_PlayerCharacter, BlendTime);
 
 	m_PlayerCharacter->bIsBlending = true;
+	
+	FTimerHandle InteractingHandle;
+	FTimerHandle BlendingHandle;
 
 	GetWorldTimerManager().SetTimer(InteractingHandle, this, &ARequestManager::IsInteractingSetFalse, BlendTime, false);
 	GetWorldTimerManager().SetTimer(BlendingHandle, this, &ARequestManager::IsBlendingSetFalse, BlendTime, false);

@@ -8,7 +8,7 @@ public class Sicilian : ModuleRules
 	{
 		PCHUsage = PCHUsageMode.UseExplicitOrSharedPCHs;
 	
-		PublicDependencyModuleNames.AddRange(new string[] { "Core", "CoreUObject", "Engine", "InputCore", "InteractionSystem" });
+		PublicDependencyModuleNames.AddRange(new string[] { "Core", "CoreUObject", "Engine", "InputCore", "InteractionSystem", "UMG" });
 
 		PrivateDependencyModuleNames.AddRange(new string[] {  });
 

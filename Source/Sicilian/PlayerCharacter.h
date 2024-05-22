@@ -27,8 +27,11 @@ public:
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
 	UFUNCTION(BlueprintCallable)
-	void TryInteract(UCameraComponent* CameraComponent, bool Cancel, bool SecondInteraction);
+	AInteractable* RaycastForInteractable(UCameraComponent* CameraComponent);
 
+	UFUNCTION(BlueprintCallable)
+	void TryInteract(UCameraComponent* CameraComponent, bool Cancel, bool AlternativeInteraction);
+	
 public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	float MouseSpeed;

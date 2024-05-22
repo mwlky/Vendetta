@@ -20,20 +20,15 @@ void APlayerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCom
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
 }
 
-void APlayerCharacter::TryInteract(UCameraComponent* CameraComponent, bool Cancel, bool SecondInteraction)
+AInteractable* APlayerCharacter::RaycastForInteractable(UCameraComponent* CameraComponent)
 {
-	if (!CameraComponent)
-	{
-		return;
-	}
-	
 	FRotator cameraRotation = CameraComponent->GetComponentRotation();
 	FQuat cameraQuaternion = FQuat(cameraRotation);
 	FVector forwardVector = cameraQuaternion.GetForwardVector();
 
 	AActor* cameraOwner = CameraComponent->GetOwner();
 	FVector location = cameraOwner->GetActorLocation();
-
+	
 	FVector start = location;
 	FVector end = forwardVector * InteractionDistance + location;
 
@@ -47,23 +42,30 @@ void APlayerCharacter::TryInteract(UCameraComponent* CameraComponent, bool Cance
 	{
 		AInteractable* Interactable = Cast<AInteractable>(hit.GetActor());
 
-		if (Interactable == nullptr)
-		{
-			return;
-		}
-
-		if (Cancel)
-		{
-			Interactable->CancelInteraction();
-			return;
-		}
-		
-		if (SecondInteraction)
-			Interactable->AlternativeInteraction();
-		
-		else
-			Interactable->MainInteraction();
+		return Interactable;
 	}
+	
+	return nullptr;
+}
+
+void APlayerCharacter::TryInteract(UCameraComponent* CameraComponent, bool Cancel, bool AlternativeInteraction)
+{
+	if (!CameraComponent)
+		return;
+
+	AInteractable* Interactable = RaycastForInteractable(CameraComponent);
+	
+	if (!Interactable)
+		return;
+
+	if (Cancel)
+		Interactable->CancelInteraction();
+
+	else if (AlternativeInteraction)
+		Interactable->AlternativeInteraction();
+
+	else
+		Interactable->MainInteraction();
 }
 
 

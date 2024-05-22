@@ -10,6 +10,8 @@
 #include "Camera/CameraActor.h"
 #include "RequestsManager.generated.h"
 
+class ASicillianPlayerController;
+class AHudManager;
 UDELEGATE(BlueprintAuthorityOnly)
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnInteractionStarted);
 
@@ -86,5 +88,7 @@ private:
 	FRequest* m_PlayerRequest = nullptr;
 	FRequest* m_CurrentRequest = nullptr;
 	
+	AHudManager* m_HudManager = nullptr;
 	APlayerCharacter* m_PlayerCharacter = nullptr;
+	ASicillianPlayerController* m_PlayerController = nullptr;
 };
