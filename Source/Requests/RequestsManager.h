@@ -12,6 +12,7 @@
 
 class ASicillianPlayerController;
 class AHudManager;
+
 UDELEGATE(BlueprintAuthorityOnly)
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnInteractionStarted);
 

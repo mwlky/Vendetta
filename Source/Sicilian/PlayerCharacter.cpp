@@ -1,5 +1,13 @@
 #include "PlayerCharacter.h"
 
+#include "HudManager.h"
+#include "Camera/CameraComponent.h"
+#include "SicillianPlayerController.h"
+
+#include "Kismet/GameplayStatics.h"
+
+#define DEBUG(x) GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Blue, x);
+
 APlayerCharacter::APlayerCharacter()
 {
 	PrimaryActorTick.bCanEverTick = true;
@@ -8,11 +16,31 @@ APlayerCharacter::APlayerCharacter()
 void APlayerCharacter::BeginPlay()
 {
 	Super::BeginPlay();
+	
+	APlayerController* PlayerController = UGameplayStatics::GetPlayerController(this, 0);
+
+	m_HudManager = Cast<AHudManager>(PlayerController->GetHUD());
+	m_PlayerController = Cast<ASicillianPlayerController>(PlayerController);
 }
 
 void APlayerCharacter::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
+
+	if (!m_HudManager)
+		return;
+
+	if(!m_Camera)
+		return;
+
+	AInteractable* Interactable = RaycastForInteractable(m_Camera);
+	
+	if(Interactable)
+	{
+		m_HudManager->ShowInteractableDot(true);
+	}
+	else
+		m_HudManager->ShowBasicDot(true);
 }
 
 void APlayerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
@@ -66,6 +94,11 @@ void APlayerCharacter::TryInteract(UCameraComponent* CameraComponent, bool Cance
 
 	else
 		Interactable->MainInteraction();
+}
+
+void APlayerCharacter::InjectCamera(UCameraComponent* Camera)
+{
+	m_Camera = Camera;
 }
 
 

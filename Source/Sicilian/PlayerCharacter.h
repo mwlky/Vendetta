@@ -4,10 +4,8 @@
 
 #include "CoreMinimal.h"
 
-#include "Camera/CameraComponent.h"
 #include "GameFramework/Character.h"
 #include "InteractionSystem/Interactable.h"
-
 #include "PlayerCharacter.generated.h"
 
 UCLASS()
@@ -27,12 +25,11 @@ public:
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
 	UFUNCTION(BlueprintCallable)
-	AInteractable* RaycastForInteractable(UCameraComponent* CameraComponent);
+	AInteractable* RaycastForInteractable(class UCameraComponent* CameraComponent);
 
 	UFUNCTION(BlueprintCallable)
-	void TryInteract(UCameraComponent* CameraComponent, bool Cancel, bool AlternativeInteraction);
+	void TryInteract(class UCameraComponent* CameraComponent, bool Cancel, bool AlternativeInteraction);
 	
-public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	float MouseSpeed;
 
@@ -49,4 +46,13 @@ public:
 	bool bIsBlending = false;
 
 	bool bPickedUpRequest = false;
+
+	class AHudManager* m_HudManager = nullptr;
+	class ASicillianPlayerController* m_PlayerController = nullptr;
+	
+	class UCameraComponent* m_Camera = nullptr;
+
+private:
+	UFUNCTION(BlueprintCallable, Category = "Dependency Injection")
+	void InjectCamera(UCameraComponent* Camera);
 };

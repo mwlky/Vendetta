@@ -3,6 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "DotWidget.h"
 #include "GameFramework/HUD.h"
 
 #include "Blueprint/UserWidget.h"
@@ -15,14 +16,21 @@ class SICILIAN_API AHudManager : public AHUD
 	GENERATED_BODY()
 
 public:
-	void ShowDot();
-	void HideDots();
+	void HideAllDots();
+	void ShowBasicDot(bool HidePrevious);
+	void ShowInteractableDot(bool HidePrevious);
 	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Widgets")
 	TSubclassOf<UUserWidget> DotWidgetClass = nullptr;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Widgets")
+	TSubclassOf<UUserWidget> DotInteractableWidgetClass = nullptr;
 	
 private:
 	virtual void BeginPlay() override;
 
-	UUserWidget* m_DotWidget = nullptr;
+	UDotWidget* m_DotWidget = nullptr;
+	UDotWidget* m_DotInteractableWidget = nullptr;
+
+	bool bIsNormalDot = false;
 };

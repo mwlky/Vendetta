@@ -60,7 +60,7 @@ void ARequestManager::StartInteraction()
 	if (!m_PlayerController)
 		return;
 
-	m_HudManager->HideDots();
+	m_HudManager->HideAllDots();
 	m_PlayerController->bShowMouseCursor = true;
 	m_PlayerController->SetInputMode(FInputModeGameAndUI());
 	m_PlayerController->SetViewTargetWithBlend(CameraActor, BlendTime, VTBlend_Linear);
@@ -82,7 +82,7 @@ void ARequestManager::CancelInteraction()
 		return;
 
 	if (m_HudManager)
-		m_HudManager->ShowDot();
+		m_HudManager->ShowBasicDot(true);
 
 	m_PlayerController->bShowMouseCursor = false;
 	m_PlayerController->SetInputMode(FInputModeGameOnly());
