@@ -8,7 +8,6 @@ AInteractable::AInteractable()
 	PrimaryActorTick.bCanEverTick = false;
 	
 	m_Mesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Mesh"));
-	m_Mesh->Mobility = EComponentMobility::Movable;
 	RootComponent = m_Mesh;
 
 	m_BoxComponent = CreateDefaultSubobject<UBoxComponent>(TEXT("Box collider"));
@@ -27,6 +26,20 @@ void AInteractable::BeginPlay()
 	Super::BeginPlay();
 }
 
+void AInteractable::Highlight(bool bActive, bool bForce)
+{
+	if(!bHighlightable && !bForce)
+		return;
+	
+	if(!MeshToHighlight)
+		return;
+
+	if(MeshToHighlight->bRenderCustomDepth == bActive)
+		return;
+	
+	MeshToHighlight->SetRenderCustomDepth(bActive);
+}
+
 void AInteractable::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
@@ -34,15 +47,12 @@ void AInteractable::Tick(float DeltaTime)
 
 void AInteractable::MainInteraction()
 {
-	UE_LOG(LogTemp, Warning, TEXT("Base interaction"));
 }
 
 void AInteractable::AlternativeInteraction()
 {
-	UE_LOG(LogTemp, Warning, TEXT("Base interaction"));
 }
 
 void AInteractable::CancelInteraction()
 {
-	UE_LOG(LogTemp, Warning, TEXT("Canceling base interaction"));
 }

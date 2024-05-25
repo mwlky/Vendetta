@@ -11,11 +11,15 @@ class INTERACTIONSYSTEM_API AInteractable : public AActor
 	
 public:	
 	AInteractable();
-
+	
 protected:
 	virtual void BeginPlay() override;
 
-public:	
+	UPROPERTY(BlueprintReadWrite)
+	class UStaticMeshComponent* MeshToHighlight = nullptr;
+	
+public:
+	virtual void Highlight(bool bActive, bool bForce = false);
 	virtual void Tick(float DeltaTime) override;
 
 	UFUNCTION(BlueprintCallable)
@@ -28,9 +32,12 @@ public:
 	virtual void CancelInteraction();
 
 public:
-	UPROPERTY(BlueprintReadWrite, EditAnywhere)
+	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "Interactable Components")
+	class UBoxComponent* m_BoxComponent = nullptr;
+
+	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "Interactable Components")
 	class UStaticMeshComponent* m_Mesh = nullptr;
 
-	UPROPERTY(BlueprintReadWrite, EditAnywhere)
-	class UBoxComponent* m_BoxComponent = nullptr;
+	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "Interactable Settings")
+	bool bHighlightable = false;
 };

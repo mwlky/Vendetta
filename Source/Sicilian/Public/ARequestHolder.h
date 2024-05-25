@@ -17,23 +17,17 @@ public:
 
 protected:
 	void PutRequest();
-	
+
 	virtual void BeginPlay() override;
 
 	UFUNCTION()
 	void HandleRequestPickedUp();
 
 public:
-	void SetOutlineActivity(bool Activity);
-	
 	virtual void MainInteraction() override;
 	virtual void AlternativeInteraction() override;
-
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	UStaticMeshComponent* Box = nullptr;
-
-private:
 	
+private:
 	UPROPERTY(EditAnywhere, Category = "Dependencies")
 	class ARequestManager* m_RequestsManager = nullptr;
 };

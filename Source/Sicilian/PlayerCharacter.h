@@ -5,6 +5,8 @@
 #include "CoreMinimal.h"
 
 #include "GameFramework/Character.h"
+#include "Camera/CameraComponent.h"
+
 #include "InteractionSystem/Interactable.h"
 #include "PlayerCharacter.generated.h"
 
@@ -25,10 +27,10 @@ public:
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
 	UFUNCTION(BlueprintCallable)
-	AInteractable* RaycastForInteractable(class UCameraComponent* CameraComponent);
+	AInteractable* RaycastForInteractable(UCameraComponent* CameraComponent);
 
 	UFUNCTION(BlueprintCallable)
-	void TryInteract(class UCameraComponent* CameraComponent, bool Cancel, bool AlternativeInteraction);
+	void TryInteract(UCameraComponent* CameraComponent, bool Cancel, bool AlternativeInteraction);
 	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	float MouseSpeed;
@@ -49,10 +51,13 @@ public:
 
 	class AHudManager* m_HudManager = nullptr;
 	class ASicillianPlayerController* m_PlayerController = nullptr;
-	
-	class UCameraComponent* m_Camera = nullptr;
+
 
 private:
 	UFUNCTION(BlueprintCallable, Category = "Dependency Injection")
 	void InjectCamera(UCameraComponent* Camera);
+
+	UCameraComponent* m_Camera = nullptr;
+	AInteractable* m_LastInteractable = nullptr;
+	
 };
