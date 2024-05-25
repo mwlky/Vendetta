@@ -62,8 +62,7 @@ AInteractable* APlayerCharacter::RaycastForInteractable(UCameraComponent* Camera
 	FQuat cameraQuaternion = FQuat(cameraRotation);
 	FVector forwardVector = cameraQuaternion.GetForwardVector();
 
-	AActor* cameraOwner = CameraComponent->GetOwner();
-	FVector location = cameraOwner->GetActorLocation();
+	FVector location = CameraComponent->GetComponentLocation();
 
 	FVector start = location;
 	FVector end = forwardVector * InteractionDistance + location;
@@ -73,11 +72,10 @@ AInteractable* APlayerCharacter::RaycastForInteractable(UCameraComponent* Camera
 	FCollisionQueryParams Params;
 	Params.AddIgnoredActor(this);
 	Params.TraceTag = FName("InteractableTrace");
-
+	
 	if (GetWorld()->LineTraceSingleByChannel(hit, start, end, ECC_GameTraceChannel1, Params))
 	{
 		AInteractable* Interactable = Cast<AInteractable>(hit.GetActor());
-
 		return Interactable;
 	}
 
