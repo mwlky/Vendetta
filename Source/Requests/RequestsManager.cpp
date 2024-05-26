@@ -9,6 +9,8 @@
 
 void ARequestManager::BeginPlay()
 {
+	Super::BeginPlay();
+	
 	ACharacter* Character = UGameplayStatics::GetPlayerCharacter(this, 0);
 	m_PlayerCharacter = Cast<APlayerCharacter>(Character);
 
@@ -19,8 +21,6 @@ void ARequestManager::BeginPlay()
 	
 	m_PlayerRequest = new FRequest;
 	m_PlayerRequest->Letter = FHandwrittenLetter();
-
-	GenerateRequest();
 }
 
 #pragma region === Interaction Logic ====
