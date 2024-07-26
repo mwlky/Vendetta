@@ -80,8 +80,8 @@ private:
 	FHandwrittenLetter GenerateLetter();
 	FReport GenerateReport();
 	ApproveType GenerateApproveType();
+	FDescriptionData GenerateDescription();
 	
-
 	void IsBlendingSetFalse();
 	void IsInteractingSetFalse();
 

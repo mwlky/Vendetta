@@ -28,7 +28,7 @@ void AInteractable::BeginPlay()
 
 void AInteractable::Highlight(bool bActive, bool bForce)
 {
-	if(!bHighlightable && !bForce)
+	if(!bHighlightable || !bForce)
 		return;
 	
 	if(!MeshToHighlight)

@@ -3,6 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "FDescriptionData.h"
 #include "Engine/DataAsset.h"
 #include "RequestsData.generated.h"
 
@@ -71,4 +72,7 @@ public:
 	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (MultiLine = true))
 	TArray<FString> Signs;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	TArray<FDescriptionData> Descriptions;
 };

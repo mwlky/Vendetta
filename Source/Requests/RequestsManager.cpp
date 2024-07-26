@@ -13,7 +13,7 @@ void ARequestManager::BeginPlay()
 	
 	ACharacter* Character = UGameplayStatics::GetPlayerCharacter(this, 0);
 	m_PlayerCharacter = Cast<APlayerCharacter>(Character);
-
+	
 	APlayerController* Controller = UGameplayStatics::GetPlayerController(this, 0);
 	m_PlayerController = Cast<ASicillianPlayerController>(Controller);
 
@@ -163,6 +163,7 @@ FRequest ARequestManager::GenerateRequest()
 	FReport report = GenerateReport();
 	FString BirthDate = GenerateBirth();
 	FHandwrittenLetter Letter = GenerateLetter();
+	FDescriptionData DescriptionData = GenerateDescription();
 
 	if (m_CurrentRequest != nullptr)
 		delete m_CurrentRequest;
@@ -172,7 +173,7 @@ FRequest ARequestManager::GenerateRequest()
 	m_PlayerRequest->bIsSigned = false;
 	m_PlayerCharacter->bPickedUpRequest = false;
 	
-	m_CurrentRequest = new FRequest(randomName, randomSurname, BirthDate, Approve, Letter, report);
+	m_CurrentRequest = new FRequest(randomName, randomSurname, BirthDate, Approve, Letter, report, DescriptionData);
 	RequestGenerated.Broadcast(*m_CurrentRequest);
 
 	return *m_CurrentRequest;
@@ -180,9 +181,9 @@ FRequest ARequestManager::GenerateRequest()
 
 FString ARequestManager::GenerateBirth()
 {
-	const int BirthDay = FMath::RandRange(1, 28);
-	const int BirthMonth = FMath::RandRange(1, 12);
-	const int BirthYear = FMath::RandRange(1902, 1925);
+	int BirthDay = FMath::RandRange(1, 28);
+	int BirthMonth = FMath::RandRange(1, 12);
+	int BirthYear = FMath::RandRange(1902, 1925);
 
 	FString birthDate = FString::FromInt(BirthMonth) + "." + FString::FromInt(BirthDay) + "." +
 		FString::FromInt(BirthYear);
@@ -220,6 +221,15 @@ ApproveType ARequestManager::GenerateApproveType()
 	int value = FMath::RandRange(0, Possibilites);
 
 	return static_cast<ApproveType>(value);
+}
+
+FDescriptionData ARequestManager::GenerateDescription()
+{
+	TArray<FDescriptionData> Possibilities = RequestData->Descriptions;
+	int32 Amount = Possibilities.Num();
+	int32 Drawn = FMath::RandRange(0, Amount - 1);
+
+	return Possibilities[Drawn];
 }
 
 FReport ARequestManager::GenerateReport()

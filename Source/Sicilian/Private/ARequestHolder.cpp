@@ -20,7 +20,7 @@ void AARequestHolder::BeginPlay()
 void AARequestHolder::PutRequest()
 {
 	m_RequestsManager->PutRequest();
-	Highlight(false);
+	Highlight(false, true);
 }
 
 void AARequestHolder::HandleRequestPickedUp()

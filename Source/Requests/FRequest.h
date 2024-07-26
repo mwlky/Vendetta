@@ -11,8 +11,8 @@ struct FRequest
 	GENERATED_BODY()
 
 	FRequest() = default;
-	FRequest(FString name, FString surname, FString birth, ApproveType approveType, FHandwrittenLetter letter,
-	         FReport report);
+	FRequest(FString name, FString surname, FString birth, ApproveType approveType, const FHandwrittenLetter& letter,
+	         const FReport& report, const FDescriptionData& DescriptionData);
 
 #pragma region === Strings ===
 
@@ -38,14 +38,20 @@ struct FRequest
 
 	// NYCID New york city identification
 	UPROPERTY(BlueprintReadOnly)
-	int32 Nysid = 0;
+	FString Nysid;
 
 	UPROPERTY(BlueprintReadOnly)
-	int32 TopCharge = 0;
+	FString TopCharge;
 
 	UPROPERTY(BlueprintReadOnly)
-	int32 ArrestID = 0;
+	FString ArrestID;
 
+	UPROPERTY(BlueprintReadOnly)
+	FString CrimeDate = "";
+
+	UPROPERTY(BlueprintReadOnly)
+	int CrimeAge = 0;
+ 	
 	UPROPERTY(BlueprintReadOnly)
 	ApproveType Type = ApproveType::NONE;
 
