@@ -2,30 +2,30 @@
 
 #include "ARequestHolder.h"
 
-#include "Requests/RequestsManager.h"
-
 AARequestHolder::AARequestHolder()
 {
 	PrimaryActorTick.bCanEverTick = false;
 }
 
+void AARequestHolder::Activate()
+{
+	m_IsActive = true;
+	Highlight(true, true);
+}
+
 void AARequestHolder::BeginPlay()
 {
 	Super::BeginPlay();
-
-	if (m_RequestsManager)
-		m_RequestsManager->RequestPickedUp.AddDynamic(this, &AARequestHolder::HandleRequestPickedUp);
 }
 
 void AARequestHolder::PutRequest()
 {
+	if (!m_IsActive)
+		return;
+
+	m_IsActive = false;
 	m_RequestsManager->PutRequest();
 	Highlight(false, true);
-}
-
-void AARequestHolder::HandleRequestPickedUp()
-{
-	Highlight(true, true);
 }
 
 void AARequestHolder::MainInteraction()

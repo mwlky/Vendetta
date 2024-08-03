@@ -10,6 +10,7 @@
 #include "Camera/CameraActor.h"
 #include "RequestsManager.generated.h"
 
+class AARequestHolder;
 class ASicillianPlayerController;
 class AHudManager;
 
@@ -81,15 +82,21 @@ private:
 	FReport GenerateReport();
 	ApproveType GenerateApproveType();
 	FDescriptionData GenerateDescription();
-	
+
+	void DrawRequestHolder();
 	void IsBlendingSetFalse();
 	void IsInteractingSetFalse();
 
 private:
+	UPROPERTY(EditAnywhere, Category = "References")
+	TArray<AARequestHolder*> m_Holders;
+	
 	FRequest* m_PlayerRequest = nullptr;
 	FRequest* m_CurrentRequest = nullptr;
 	
 	AHudManager* m_HudManager = nullptr;
 	APlayerCharacter* m_PlayerCharacter = nullptr;
 	ASicillianPlayerController* m_PlayerController = nullptr;
+
+	
 };

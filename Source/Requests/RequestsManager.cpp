@@ -2,6 +2,7 @@
 
 #include "RequestsManager.h"
 
+#include "ARequestHolder.h"
 #include "HudManager.h"
 #include "SicillianPlayerController.h"
 
@@ -10,15 +11,15 @@
 void ARequestManager::BeginPlay()
 {
 	Super::BeginPlay();
-	
+
 	ACharacter* Character = UGameplayStatics::GetPlayerCharacter(this, 0);
 	m_PlayerCharacter = Cast<APlayerCharacter>(Character);
-	
+
 	APlayerController* Controller = UGameplayStatics::GetPlayerController(this, 0);
 	m_PlayerController = Cast<ASicillianPlayerController>(Controller);
 
 	m_HudManager = Cast<AHudManager>(Controller->GetHUD());
-	
+
 	m_PlayerRequest = new FRequest;
 	m_PlayerRequest->Letter = FHandwrittenLetter();
 }
@@ -28,21 +29,21 @@ void ARequestManager::BeginPlay()
 void ARequestManager::PutRequest()
 {
 	if (!m_PlayerCharacter->bPickedUpRequest)
-	{
 		return;
-	}
 
 	m_PlayerCharacter->bPickedUpRequest = false;
 	GenerateRequest();
 }
 
-bool ARequestManager::TryPickUpRequest()	
+bool ARequestManager::TryPickUpRequest()
 {
 	if (!m_PlayerRequest->bIsSigned)
 		return false;
 
 	m_PlayerCharacter->bPickedUpRequest = true;
 	RequestPickedUp.Broadcast();
+	DrawRequestHolder();
+
 	return true;
 }
 
@@ -56,7 +57,7 @@ void ARequestManager::StartInteraction()
 
 	if (!CameraActor)
 		return;
-	
+
 	if (!m_PlayerController)
 		return;
 
@@ -64,7 +65,7 @@ void ARequestManager::StartInteraction()
 	m_PlayerController->bShowMouseCursor = true;
 	m_PlayerController->SetInputMode(FInputModeGameAndUI());
 	m_PlayerController->SetViewTargetWithBlend(CameraActor, BlendTime, VTBlend_Linear);
-	
+
 	InteractionStarted.Broadcast();
 
 	FTimerHandle Handle;
@@ -77,7 +78,7 @@ void ARequestManager::CancelInteraction()
 {
 	if (!m_PlayerCharacter->bIsInteracting)
 		return;
-	
+
 	if (!m_PlayerController)
 		return;
 
@@ -89,7 +90,7 @@ void ARequestManager::CancelInteraction()
 	m_PlayerController->SetViewTargetWithBlend(m_PlayerCharacter, BlendTime);
 
 	m_PlayerCharacter->bIsBlending = true;
-	
+
 	FTimerHandle InteractingHandle;
 	FTimerHandle BlendingHandle;
 
@@ -122,7 +123,7 @@ bool ARequestManager::TrySignRequest()
 		DEBUG("No decision for letter!");
 		return false;
 	}
-	
+
 	m_PlayerRequest->bIsSigned = true;
 	CancelInteraction();
 	return true;
@@ -172,7 +173,7 @@ FRequest ARequestManager::GenerateRequest()
 
 	m_PlayerRequest->bIsSigned = false;
 	m_PlayerCharacter->bPickedUpRequest = false;
-	
+
 	m_CurrentRequest = new FRequest(randomName, randomSurname, BirthDate, Approve, Letter, report, DescriptionData);
 	RequestGenerated.Broadcast(*m_CurrentRequest);
 
@@ -230,6 +231,14 @@ FDescriptionData ARequestManager::GenerateDescription()
 	int32 Drawn = FMath::RandRange(0, Amount - 1);
 
 	return Possibilities[Drawn];
+}
+
+void ARequestManager::DrawRequestHolder()
+{
+	int Random = FMath::RandRange(0, m_Holders.Num() - 1);
+
+	AARequestHolder* DrawnRequestHolder = m_Holders[Random];
+	DrawnRequestHolder->Activate();
 }
 
 FReport ARequestManager::GenerateReport()
