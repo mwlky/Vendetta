@@ -6,6 +6,7 @@
 #include "Blueprint/UserWidget.h"
 #include "RequestWidget.generated.h"
 
+class UTextBlock;
 UDELEGATE(BlueprintAuthorityOnly)
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnInjected);
 
@@ -16,11 +17,16 @@ class REQUESTSYSTEM_API URequestWidget : public UUserWidget
 {
 	GENERATED_BODY()
 
+protected:
+	virtual void NativeConstruct() override;
+	
 public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Ref")
 	ARequestManager* RequestManager;
 
-
 	UFUNCTION(BlueprintImplementableEvent, BlueprintCallable)
 	void OnInject();
+
+	UFUNCTION(BlueprintCallable)
+	void AdjustFontSize(UTextBlock* textBlock, FText text);
 };
