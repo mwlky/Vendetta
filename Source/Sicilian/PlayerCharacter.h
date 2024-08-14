@@ -52,7 +52,6 @@ public:
 	class AHudManager* m_HudManager = nullptr;
 	class ASicillianPlayerController* m_PlayerController = nullptr;
 
-
 private:
 	UFUNCTION(BlueprintCallable, Category = "Dependency Injection")
 	void InjectCamera(UCameraComponent* Camera);

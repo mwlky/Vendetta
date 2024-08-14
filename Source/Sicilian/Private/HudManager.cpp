@@ -6,6 +6,8 @@
 
 void AHudManager::BeginPlay()
 {
+	Super::BeginPlay();
+
 	m_DotInteractableWidget = Cast<UDotWidget>(CreateWidget<UUserWidget>(GetWorld(), DotInteractableWidgetClass));
 	m_DotInteractableWidget->AddToViewport();
 	m_DotInteractableWidget->SetVisibility(ESlateVisibility::Hidden);
@@ -61,7 +63,7 @@ void AHudManager::ShowInteractableDot(bool HidePrevious)
 	}
 
 	bIsNormalDot = false;
-	
+
 	m_DotInteractableWidget->SetVisibility(ESlateVisibility::Visible);
 	m_DotInteractableWidget->PlayAnimation();
 }

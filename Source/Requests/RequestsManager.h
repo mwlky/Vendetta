@@ -57,6 +57,9 @@ public:
 
 	UFUNCTION(BlueprintCallable)
 	bool VerifyRequest();
+
+	UFUNCTION(BlueprintPure, Category = "Request")
+	FRequest GetCurrentRequest() const { return *m_CurrentRequest; }
 	
 	UFUNCTION(BlueprintCallable)
 	FRequest GenerateRequest();

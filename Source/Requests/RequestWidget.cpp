@@ -27,8 +27,6 @@ void URequestWidget::AdjustFontSize(UTextBlock* textBlock, FText text)
 	else
 		NewFontSize = 10;
 	
-	GEngine->AddOnScreenDebugMessage(0, 5, FColor::Blue, FString::FromInt(NewFontSize));
-
 	FSlateFontInfo FontInfo = textBlock->GetFont();
 	FontInfo.Size = NewFontSize;
 	textBlock->SetFont(FontInfo);
