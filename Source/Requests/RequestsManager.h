@@ -101,5 +101,6 @@ private:
 	APlayerCharacter* m_PlayerCharacter = nullptr;
 	ASicillianPlayerController* m_PlayerController = nullptr;
 
-	
+	UPROPERTY(BlueprintReadWrite, Category = "Data", meta = (AllowPrivateAccess = "true"))
+	bool bIsLetterOpened = false;
 };
