@@ -23,7 +23,6 @@ protected:
 
 public:	
 	virtual void Tick(float DeltaTime) override;
-
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
 	UFUNCTION(BlueprintCallable)
@@ -49,14 +48,13 @@ public:
 
 	bool bPickedUpRequest = false;
 
-	class AHudManager* m_HudManager = nullptr;
-	class ASicillianPlayerController* m_PlayerController = nullptr;
-
 private:
 	UFUNCTION(BlueprintCallable, Category = "Dependency Injection")
 	void InjectCamera(UCameraComponent* Camera);
 
 	UCameraComponent* m_Camera = nullptr;
 	AInteractable* m_LastInteractable = nullptr;
-	
+
+	class AHudManager* m_HudManager = nullptr;
+	class ASicillianPlayerController* m_PlayerController = nullptr;
 };

@@ -29,5 +29,4 @@ void USelectWidget::ReverseAnimation()
 	m_IsPlayed = false;
 	
 	UUserWidget::PlayAnimation(m_Animation, 0, 1.f, EUMGSequencePlayMode::Reverse, m_PlaybackSpeed);
-
 }

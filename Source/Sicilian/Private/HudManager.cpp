@@ -18,7 +18,7 @@ void AHudManager::BeginPlay()
 
 	m_SelectWidget = CreateWidget<USelectWidget>(GetWorld(), SelectWidget);
 	m_SelectWidget->AddToViewport();
-	
+
 	ShowBasicDot(true);
 }
 

@@ -79,20 +79,24 @@ public:
 private:
 	virtual void BeginPlay() override;
 	
-	FString GenerateBirth();
 	bool DrawIsAcceptable();
-	FHandwrittenLetter GenerateLetter();
-	FReport GenerateReport();
-	ApproveType GenerateApproveType();
-	FDescriptionData GenerateDescription();
-
 	void DrawRequestHolder();
 	void IsBlendingSetFalse();
 	void IsInteractingSetFalse();
+	
+	ApproveType GenerateApproveType();
+	
+	FReport GenerateReport();
+	FString GenerateBirth();
+	FHandwrittenLetter GenerateLetter();
+	FDescriptionData GenerateDescription();
 
 private:
 	UPROPERTY(EditAnywhere, Category = "References")
 	TArray<AARequestHolder*> m_Holders;
+	
+	UPROPERTY(BlueprintReadWrite, Category = "Data", meta = (AllowPrivateAccess = "true"))
+	bool bIsLetterOpened = false;
 	
 	FRequest* m_PlayerRequest = nullptr;
 	FRequest* m_CurrentRequest = nullptr;
@@ -100,7 +104,4 @@ private:
 	AHudManager* m_HudManager = nullptr;
 	APlayerCharacter* m_PlayerCharacter = nullptr;
 	ASicillianPlayerController* m_PlayerController = nullptr;
-
-	UPROPERTY(BlueprintReadWrite, Category = "Data", meta = (AllowPrivateAccess = "true"))
-	bool bIsLetterOpened = false;
 };

@@ -37,7 +37,9 @@ void APlayerCharacter::Tick(float DeltaTime)
 	if (Interactable)
 	{
 		m_HudManager->ShowInteractableDot(true);
-		m_HudManager->SetSelectPanelActivity(true);
+		if (!bIsInteracting)
+			m_HudManager->SetSelectPanelActivity(true);
+
 		Interactable->Highlight(true);
 		m_LastInteractable = Interactable;
 	}
@@ -45,12 +47,16 @@ void APlayerCharacter::Tick(float DeltaTime)
 	{
 		m_HudManager->SetSelectPanelActivity(false);
 		m_HudManager->ShowBasicDot(true);
+
 		if (!m_LastInteractable)
 			return;
 
 		m_LastInteractable->Highlight(false);
 		m_LastInteractable = nullptr;
 	}
+
+	if (bIsInteracting)
+		m_HudManager->SetSelectPanelActivity(false);
 }
 
 void APlayerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
@@ -74,7 +80,7 @@ AInteractable* APlayerCharacter::RaycastForInteractable(UCameraComponent* Camera
 	FCollisionQueryParams Params;
 	Params.AddIgnoredActor(this);
 	Params.TraceTag = FName("InteractableTrace");
-	
+
 	if (GetWorld()->LineTraceSingleByChannel(hit, start, end, ECC_GameTraceChannel1, Params))
 	{
 		AInteractable* Interactable = Cast<AInteractable>(hit.GetActor());
