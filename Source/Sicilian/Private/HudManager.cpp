@@ -3,18 +3,22 @@
 #include "HudManager.h"
 
 #include "Blueprint/UserWidget.h"
+#include "InteractionSystem/SelectWidget.h"
 
 void AHudManager::BeginPlay()
 {
 	Super::BeginPlay();
 
-	m_DotInteractableWidget = Cast<UDotWidget>(CreateWidget<UUserWidget>(GetWorld(), DotInteractableWidgetClass));
+	m_DotInteractableWidget = CreateWidget<UDotWidget>(GetWorld(), DotInteractableWidgetClass);
 	m_DotInteractableWidget->AddToViewport();
 	m_DotInteractableWidget->SetVisibility(ESlateVisibility::Hidden);
 
-	m_DotWidget = Cast<UDotWidget>(CreateWidget<UUserWidget>(GetWorld(), DotWidgetClass));
+	m_DotWidget = CreateWidget<UDotWidget>(GetWorld(), DotWidgetClass);
 	m_DotWidget->AddToViewport();
 
+	m_SelectWidget = CreateWidget<USelectWidget>(GetWorld(), SelectWidget);
+	m_SelectWidget->AddToViewport();
+	
 	ShowBasicDot(true);
 }
 
@@ -46,6 +50,18 @@ void AHudManager::ShowBasicDot(bool HidePrevious)
 
 	m_DotWidget->SetVisibility(ESlateVisibility::Visible);
 	m_DotWidget->PlayAnimation();
+}
+
+void AHudManager::SetSelectPanelActivity(bool Activity)
+{
+	if (!m_SelectWidget)
+		return;
+
+	if (Activity)
+		m_SelectWidget->PlayAnimation();
+
+	else
+		m_SelectWidget->ReverseAnimation();
 }
 
 void AHudManager::ShowInteractableDot(bool HidePrevious)

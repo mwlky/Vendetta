@@ -37,11 +37,13 @@ void APlayerCharacter::Tick(float DeltaTime)
 	if (Interactable)
 	{
 		m_HudManager->ShowInteractableDot(true);
+		m_HudManager->SetSelectPanelActivity(true);
 		Interactable->Highlight(true);
 		m_LastInteractable = Interactable;
 	}
 	else
 	{
+		m_HudManager->SetSelectPanelActivity(false);
 		m_HudManager->ShowBasicDot(true);
 		if (!m_LastInteractable)
 			return;

@@ -18,6 +18,7 @@ class SICILIAN_API AHudManager : public AHUD
 public:
 	void HideAllDots();
 	void ShowBasicDot(bool HidePrevious);
+	void SetSelectPanelActivity(bool Activity);
 	void ShowInteractableDot(bool HidePrevious);
 	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Widgets")
@@ -25,12 +26,16 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Widgets")
 	TSubclassOf<UUserWidget> DotInteractableWidgetClass = nullptr;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Widgets")
+	TSubclassOf<class USelectWidget> SelectWidget = nullptr;
 	
 private:
 	virtual void BeginPlay() override;
 
 	UDotWidget* m_DotWidget = nullptr;
+	USelectWidget* m_SelectWidget = nullptr;
 	UDotWidget* m_DotInteractableWidget = nullptr;
-
+	
 	bool bIsNormalDot = false;
 };
