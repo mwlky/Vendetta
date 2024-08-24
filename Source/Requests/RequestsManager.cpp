@@ -64,7 +64,7 @@ void ARequestManager::StartInteraction()
 	m_HudManager->HideAllDots();
 	m_PlayerController->bShowMouseCursor = true;
 	m_PlayerController->SetInputMode(FInputModeGameAndUI());
-	m_PlayerController->SetViewTargetWithBlend(CameraActor, BlendTime, VTBlend_Linear);
+	m_PlayerController->SetViewTargetWithBlend(CameraActor, BlendTime, VTBlend_Cubic);
 
 	InteractionStarted.Broadcast();
 
@@ -87,7 +87,7 @@ void ARequestManager::CancelInteraction()
 
 	m_PlayerController->bShowMouseCursor = false;
 	m_PlayerController->SetInputMode(FInputModeGameOnly());
-	m_PlayerController->SetViewTargetWithBlend(m_PlayerCharacter, BlendTime);
+	m_PlayerController->SetViewTargetWithBlend(m_PlayerCharacter, BlendTime, VTBlend_Cubic);
 
 	m_PlayerCharacter->bIsBlending = true;
 
