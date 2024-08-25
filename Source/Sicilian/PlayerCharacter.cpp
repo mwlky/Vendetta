@@ -34,7 +34,7 @@ void APlayerCharacter::Tick(float DeltaTime)
 
 	AInteractable* Interactable = RaycastForInteractable(m_Camera);
 
-	if (Interactable)
+	if (Interactable && Interactable->bIsInteractable)
 	{
 		m_HudManager->ShowInteractableDot(true);
 		if (!bIsInteracting)

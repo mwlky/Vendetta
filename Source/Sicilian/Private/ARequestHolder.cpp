@@ -10,6 +10,7 @@ AARequestHolder::AARequestHolder()
 void AARequestHolder::Activate()
 {
 	m_IsActive = true;
+	bIsInteractable = true;
 	Highlight(true, true);
 }
 
@@ -26,6 +27,7 @@ void AARequestHolder::PutRequest()
 	m_IsActive = false;
 	m_RequestsManager->PutRequest();
 	Highlight(false, true);
+	bIsInteractable = false;
 }
 
 void AARequestHolder::MainInteraction()
