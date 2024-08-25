@@ -31,6 +31,8 @@ public:
 	UFUNCTION(BlueprintCallable)
 	virtual void CancelInteraction();
 
+	virtual UTexture2D* GetIcon() const;
+
 public:
 	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "Interactable Components")
 	class UBoxComponent* m_BoxComponent = nullptr;
@@ -40,4 +42,12 @@ public:
 
 	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "Interactable Settings")
 	bool bHighlightable = false;
+
+	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "Interactable Settings")
+	bool bIsInteractable = true;
+
+private:
+	
+	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "Interactable Settings", meta = (AllowPrivateAccess = "true"))
+	UTexture2D* m_InteractableIcon = nullptr;
 };

@@ -1,7 +1,6 @@
 // Damian Gorenski copyrights 2024
 
 #include "RequestInteraction.h"
-#include "Requests/RequestsManager.h"
 
 ARequestInteraction::ARequestInteraction()
 {
@@ -10,6 +9,17 @@ ARequestInteraction::ARequestInteraction()
 void ARequestInteraction::SetNormalPosition()
 {
 	SetActorLocation(m_NormalPosition);
+}
+
+UTexture2D* ARequestInteraction::GetIcon() const
+{
+	if(!RequestsManager)
+		return nullptr;
+
+	if(RequestsManager->IsRequestSigned())
+		return m_SignedTexture;
+
+	return m_NoSignedTexture;
 }
 
 void ARequestInteraction::BeginPlay()

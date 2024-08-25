@@ -47,6 +47,14 @@ bool ARequestManager::TryPickUpRequest()
 	return true;
 }
 
+bool ARequestManager::IsRequestSigned() const
+{
+	if(!m_PlayerRequest)
+		return false;
+
+	return m_PlayerRequest->bIsSigned;
+}
+
 void ARequestManager::StartInteraction()
 {
 	if (m_PlayerCharacter->bIsInteracting)

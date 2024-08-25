@@ -56,3 +56,8 @@ void AInteractable::AlternativeInteraction()
 void AInteractable::CancelInteraction()
 {
 }
+
+UTexture2D* AInteractable::GetIcon() const
+{
+	return m_InteractableIcon;
+}

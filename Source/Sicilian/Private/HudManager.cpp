@@ -52,13 +52,16 @@ void AHudManager::ShowBasicDot(bool HidePrevious)
 	m_DotWidget->PlayAnimation();
 }
 
-void AHudManager::SetSelectPanelActivity(bool Activity)
+void AHudManager::SetSelectPanelActivity(bool Activity, UTexture2D* TextureToShow)
 {
+	if(!TextureToShow)
+		UE_LOG(LogTemp, Warning, TEXT("Texture to show is null"));
+	
 	if (!m_SelectWidget)
 		return;
 
 	if (Activity)
-		m_SelectWidget->PlayAnimation();
+		m_SelectWidget->PlayAnimation(TextureToShow);
 
 	else
 		m_SelectWidget->ReverseAnimation();

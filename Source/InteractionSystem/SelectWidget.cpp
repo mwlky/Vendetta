@@ -3,12 +3,14 @@
 
 #include "SelectWidget.h"
 
+#include "Components/Image.h"
+
 void USelectWidget::InjectAnimation(UWidgetAnimation* Animation)
 {
 	m_Animation = Animation;
 }
 
-void USelectWidget::PlayAnimation()
+void USelectWidget::PlayAnimation(UTexture2D* TextureToShow)
 {
 	if(!m_Animation)
 		return;
@@ -17,6 +19,8 @@ void USelectWidget::PlayAnimation()
 		return;
 
 	m_IsPlayed = true;
+	if(Icon)
+		Icon->SetBrushFromTexture(TextureToShow, true);
 	
 	UUserWidget::PlayAnimation(m_Animation, 0, 1.f, EUMGSequencePlayMode::Forward, m_PlaybackSpeed);
 }

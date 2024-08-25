@@ -38,14 +38,14 @@ void APlayerCharacter::Tick(float DeltaTime)
 	{
 		m_HudManager->ShowInteractableDot(true);
 		if (!bIsInteracting)
-			m_HudManager->SetSelectPanelActivity(true);
+			m_HudManager->SetSelectPanelActivity(true, Interactable->GetIcon());
 
 		Interactable->Highlight(true);
 		m_LastInteractable = Interactable;
 	}
 	else
 	{
-		m_HudManager->SetSelectPanelActivity(false);
+		m_HudManager->SetSelectPanelActivity(false, nullptr);
 		m_HudManager->ShowBasicDot(true);
 
 		if (!m_LastInteractable)
@@ -56,7 +56,7 @@ void APlayerCharacter::Tick(float DeltaTime)
 	}
 
 	if (bIsInteracting)
-		m_HudManager->SetSelectPanelActivity(false);
+		m_HudManager->SetSelectPanelActivity(false, nullptr);
 }
 
 void APlayerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)

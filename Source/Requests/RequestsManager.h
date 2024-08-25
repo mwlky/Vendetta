@@ -42,9 +42,11 @@ public:
 	ACameraActor* CameraActor;
 
 	void PutRequest();
-	bool TryPickUpRequest();
 	void StartInteraction();
 	void CancelInteraction();
+	
+	bool TryPickUpRequest();
+	bool IsRequestSigned() const;
 
 	UFUNCTION(BlueprintCallable)
 	void UpdateRequestType(RequestType p_type);

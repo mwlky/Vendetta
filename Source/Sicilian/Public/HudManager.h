@@ -18,7 +18,7 @@ class SICILIAN_API AHudManager : public AHUD
 public:
 	void HideAllDots();
 	void ShowBasicDot(bool HidePrevious);
-	void SetSelectPanelActivity(bool Activity);
+	void SetSelectPanelActivity(bool Activity, UTexture2D* TextureToShow);
 	void ShowInteractableDot(bool HidePrevious);
 	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Widgets")

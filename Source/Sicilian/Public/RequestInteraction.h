@@ -3,6 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "Requests/RequestsManager.h"
 #include "InteractionSystem/Interactable.h"
 #include "Sicilian/SicilianGameModeBase.h"
 #include "RequestInteraction.generated.h"
@@ -24,6 +25,7 @@ public:
 	FVector PickUpPosition;
 
 	void SetNormalPosition();
+	virtual UTexture2D* GetIcon() const override;
 	
 private:
 	virtual void BeginPlay() override;
@@ -34,5 +36,12 @@ private:
 	UFUNCTION()
 	void HandleRequest(struct FRequest Request);
 
+private:
 	FVector m_NormalPosition = FVector::Zero();
+
+	UPROPERTY(EditAnywhere)
+	UTexture2D* m_NoSignedTexture = nullptr;
+
+	UPROPERTY(EditAnywhere)
+	UTexture2D* m_SignedTexture = nullptr;
 };
