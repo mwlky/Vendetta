@@ -32,9 +32,9 @@ As development progresses, the following features are planned to be added:
 
 Here are some screenshots and videos showcasing the current progress of Vendetta:
 
+<img src="https://media0.giphy.com/media/v1.Y2lkPTc5MGI3NjExM2N2bWtwaDlhZnVuNTUzaWtvbTQybTZveDFpb3U3Y2cxcTh3ZmtibyZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/rcwISU3QiaQXxWUOmc/200.gif" width="400" alt="video">
+
 ![image](https://i.imgur.com/2z2nq3s.jpeg)
 
 ![image](https://i.imgur.com/WiLwSxY.jpeg)
-
-![video](https://media0.giphy.com/media/v1.Y2lkPTc5MGI3NjExM2N2bWtwaDlhZnVuNTUzaWtvbTQybTZveDFpb3U3Y2cxcTh3ZmtibyZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/rcwISU3QiaQXxWUOmc/200.gif)
 
