@@ -36,3 +36,5 @@ Here are some screenshots and videos showcasing the current progress of Vendetta
 
 ![image](https://i.imgur.com/WiLwSxY.jpeg)
 
+![video](https://media0.giphy.com/media/v1.Y2lkPTc5MGI3NjExM2N2bWtwaDlhZnVuNTUzaWtvbTQybTZveDFpb3U3Y2cxcTh3ZmtibyZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/rcwISU3QiaQXxWUOmc/200.gif)
+
