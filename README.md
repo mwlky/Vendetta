@@ -11,22 +11,16 @@ Vendetta is a first-person horror game built in Unreal Engine 5 where you step i
 - Basic Sound Effects (SFX): Atmospheric sound effects have been integrated to enhance the horror experience, setting the mood and adding tension to the gameplay.
 
 - Request System: A basic request system has been implemented, where players will encounter and need to solve various in-game requests or tasks, driving the narrative forward.
-## Future Plans
 
-As development progresses, the following features are planned to be added:
-
-- AI for Enemies: The mafia and other enemies will have enhanced AI, making them more unpredictable and challenging to evade.
-
-- Expanded Storyline: More in-depth story elements and character development will be introduced, fleshing out the narrative and creating more emotional investment.
+- Mafia attack: Be careful for mafia that wants to get you!
 
 
 ## Installation
 
+Repository is not up to date due to GitHub storage limitation!
 
-- Clone or download the project repository from GitHub.
-- Open the project in Unreal Engine 5.
-- Compile the project and ensure all dependencies are installed.
-- Run the game from the Unreal Engine editor or package it to your desired platform.
+But you are still able to test my game on itch.io!
+https://mwlky.itch.io/vendetta
 
 ## Photos and Videos
 
