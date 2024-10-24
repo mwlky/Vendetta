@@ -6,8 +6,11 @@
 Vendetta is a first-person horror game built in Unreal Engine 5 where you step into the shoes of a police officer who has made a life-altering decision: to free prisoners from captivity. Now, you find yourself hunted by a dangerous mafia, and your survival skills are put to the ultimate test. The game will challenge you to navigate a dark and oppressive environment, where every decision can mean the difference between life and death.
 
 Gameplay video - https://youtu.be/Dwv4KTEMBJA
+
 Jumpscare - https://youtu.be/JnHIMEP6rG4
+
 https://youtu.be/Ppgg_lZSh3E - Hiding system
+
 
 ## Current Features
 
