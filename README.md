@@ -9,7 +9,7 @@ Gameplay video - https://youtu.be/Dwv4KTEMBJA
 
 Jumpscare - https://youtu.be/JnHIMEP6rG4
 
-https://youtu.be/Ppgg_lZSh3E - Hiding system
+Hiding system - https://youtu.be/Ppgg_lZSh3E
 
 
 ## Current Features
